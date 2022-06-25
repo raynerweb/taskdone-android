@@ -7,7 +7,10 @@ import br.com.raynerweb.ipl.taskdone.repository.TaskRepository
 import br.com.raynerweb.ipl.taskdone.repository.UserRepository
 import br.com.raynerweb.ipl.taskdone.test.CoroutineTestRule
 import br.com.raynerweb.ipl.taskdone.ui.model.ValidationType
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -19,8 +22,8 @@ import org.mockito.MockitoAnnotations
 
 class TaskFormViewModelTest {
 
-    private val trainerRepository = mock<TaskRepository>()
-    private val pokemonRepository = mock<UserRepository>()
+    private val taskRepository = mock<TaskRepository>()
+    private val userRepository = mock<UserRepository>()
 
     @InjectMocks
     lateinit var viewModel: TaskFormViewModel

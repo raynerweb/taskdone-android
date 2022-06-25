@@ -8,6 +8,10 @@
         <variable
             name="fragment"
             type="br.com.raynerweb.ipl.taskdone.ui.fragment.TaskListFragment" />
+
+        <variable
+            name="viewModel"
+            type="br.com.raynerweb.ipl.taskdone.ui.viewmodel.TaskListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,6 +20,7 @@
         tools:context=".ui.fragment.TaskListFragment">
 
         <TextView
+            android:id="@+id/tv_empty_list_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/no_tasks_message"
@@ -24,13 +29,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_user_with_tasks"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/view_tasks" />
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:onClick="@{fragment::addTask}"
             android:contentDescription="@string/add_task"
+            android:onClick="@{fragment::addTask}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_baseline_add_24" />
