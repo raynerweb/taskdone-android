@@ -4,4 +4,11 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_task">Add Task</string>
     <string name="no_tasks_message">No task to show here!</string>
+    <string name="description">Description</string>
+    <string name="date">Date</string>
+    <string name="status">Status</string>
+    <string name="backlog">Backlog</string>
+    <string name="in_progress">In Progress</string>
+    <string name="completed">Completed</string>
+    <string name="save">Save</string>
 </resources>
