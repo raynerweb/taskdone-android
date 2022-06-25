@@ -15,4 +15,5 @@
     <!-- validation message -->
     <string name="required_field">Required Field</string>
     <string name="invalid_date">Invalid date</string>
+    <string name="select_date">Select date</string>
 </resources>

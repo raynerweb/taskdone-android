@@ -21,3 +21,9 @@ fun String.toDate(format: String = DEFAULT_FORMAT): Date {
     return getDateFormat(format).parse(this)
         ?: throw ParseException("Error on parsing deadline", 0)
 }
+
+fun Long.toDate(dateFormat: String = DEFAULT_FORMAT): String {
+    val calendar: Calendar = Calendar.getInstance()
+    calendar.timeInMillis = this
+    return getDateFormat(dateFormat).format(calendar.time)
+}

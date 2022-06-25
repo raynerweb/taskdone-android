@@ -67,12 +67,27 @@ class TaskFormViewModel @Inject constructor(
         return valid
     }
 
+    private fun isDateValid(): Boolean {
+        var valid = true
+        try {
+            getDateText().toDate()
+        } catch (e: ParseException) {
+            valid = valid && false
+            _showInvalidDateMessage.postValue(true)
+        }
+        return valid
+    }
+
     fun save() = viewModelScope.launch {
+        _showInvalidDateMessage.postValue(false)
         _showRequiredDescriptionMessage.postValue(false)
         _showRequiredDateMessage.postValue(false)
-        _showInvalidDateMessage.postValue(false)
 
         if (!isValid()) {
+            return@launch
+        }
+
+        if (!isDateValid()) {
             return@launch
         }
 
@@ -85,6 +100,10 @@ class TaskFormViewModel @Inject constructor(
 
         _taskSaved.call()
 
+    }
+
+    fun setStatus(status: Status) {
+        _status.postValue(status)
     }
 
     companion object {
