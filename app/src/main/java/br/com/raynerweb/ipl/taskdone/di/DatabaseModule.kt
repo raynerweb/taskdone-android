@@ -2,7 +2,7 @@ package br.com.raynerweb.ipl.taskdone.di
 
 import android.content.Context
 import androidx.room.Room
-import br.com.raynerweb.ipl.taskdone.repository.AppDatabase
+import br.com.raynerweb.ipl.taskdone.repository.local.AppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

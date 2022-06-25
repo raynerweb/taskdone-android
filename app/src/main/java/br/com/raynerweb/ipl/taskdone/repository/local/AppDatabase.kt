@@ -1,4 +1,4 @@
-package br.com.raynerweb.ipl.taskdone.repository
+package br.com.raynerweb.ipl.taskdone.repository.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

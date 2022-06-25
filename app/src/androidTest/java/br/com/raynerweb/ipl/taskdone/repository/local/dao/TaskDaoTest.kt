@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import br.com.raynerweb.ipl.taskdone.repository.AppDatabase
+import br.com.raynerweb.ipl.taskdone.repository.local.AppDatabase
 import br.com.raynerweb.ipl.taskdone.repository.local.entity.TaskEntity
 import kotlinx.coroutines.runBlocking
 import org.junit.After
