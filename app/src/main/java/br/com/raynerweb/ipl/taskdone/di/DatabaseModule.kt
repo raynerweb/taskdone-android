@@ -22,4 +22,16 @@ object DatabaseModule {
             .build()
     }
 
+    @Singleton
+    @Provides
+    fun provideUserDao(database: AppDatabase) = database.userDao()
+
+    @Singleton
+    @Provides
+    fun provideTaskDao(database: AppDatabase) = database.taskDao()
+
+    @Singleton
+    @Provides
+    fun provideUserTaskDao(database: AppDatabase) = database.userTaskDao()
+
 }
