@@ -134,4 +134,23 @@ class TaskListViewModelTest {
             verifyZeroInteractions(emptyListObsever)
         }
 
+
+    /**
+     * Scenario 1 - Share the task
+     * Given the user is on the task list page
+     * When the user clicks on the share button
+     * Then the user can share the task
+     */
+    @Test
+    fun `Then the user can share the task`(): Unit =
+        runBlocking {
+            val shareObserver = spy<Observer<Task>>()
+            viewModel.taskShared.observeForever(shareObserver)
+
+            viewModel.shareTask(TASK)
+
+            verify(shareObserver).onChanged(eq(TASK))
+        }
+
+
 }

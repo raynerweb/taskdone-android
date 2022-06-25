@@ -1,5 +1,6 @@
 package br.com.raynerweb.ipl.taskdone.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,11 +8,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import br.com.raynerweb.ipl.taskdone.BuildConfig
 import br.com.raynerweb.ipl.taskdone.R
 import br.com.raynerweb.ipl.taskdone.databinding.FragmentTaskListBinding
 import br.com.raynerweb.ipl.taskdone.ui.adapter.TaskAdapter
 import br.com.raynerweb.ipl.taskdone.ui.viewmodel.TaskListViewModel
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class TaskListFragment : Fragment() {
@@ -52,6 +55,25 @@ class TaskListFragment : Fragment() {
     }
 
     private fun subscribe() {
+        viewModel.taskShared.observe(viewLifecycleOwner) { task ->
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            shareIntent.putExtra(
+                Intent.EXTRA_SUBJECT,
+                "${getString(R.string.app_name)} Task: #${task.taskId}"
+            )
+            val shareMessage =
+                """
+                Message: ${task.description}
+                Date: ${task.date}
+                Status: ${task.status.name}
+                
+                https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}
+                """.trimIndent()
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
+            startActivity(Intent.createChooser(shareIntent, "choose one"))
+        }
+
         viewModel.taskDeleted.observe(viewLifecycleOwner) {
             taskAdapter.tasks.remove(it.first)
             taskAdapter.notifyItemRemoved(it.second)
