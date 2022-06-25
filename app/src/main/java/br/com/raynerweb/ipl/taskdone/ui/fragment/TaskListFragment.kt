@@ -55,6 +55,7 @@ class TaskListFragment : Fragment() {
         viewModel.taskDeleted.observe(viewLifecycleOwner) {
             taskAdapter.tasks.remove(it.first)
             taskAdapter.notifyItemRemoved(it.second)
+            viewModel.checkEmptyList(taskAdapter.tasks)
         }
 
         viewModel.taskList.observe(viewLifecycleOwner) { tasks ->

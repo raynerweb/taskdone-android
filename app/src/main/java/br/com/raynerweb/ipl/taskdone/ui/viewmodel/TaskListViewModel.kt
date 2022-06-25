@@ -45,7 +45,12 @@ class TaskListViewModel @Inject constructor(
         } else {
             _taskList.postValue(tasks)
         }
+    }
 
+    fun checkEmptyList(tasks: List<Task>) {
+        if (tasks.isEmpty()) {
+            _emptyTaskList.call()
+        }
     }
 
 }
