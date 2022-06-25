@@ -12,6 +12,7 @@ import br.com.raynerweb.ipl.taskdone.R
 import br.com.raynerweb.ipl.taskdone.databinding.FragmentTaskFormBinding
 import br.com.raynerweb.ipl.taskdone.ext.toDate
 import br.com.raynerweb.ipl.taskdone.ui.model.Status
+import br.com.raynerweb.ipl.taskdone.ui.model.ValidationType
 import br.com.raynerweb.ipl.taskdone.ui.viewmodel.TaskFormViewModel
 import br.com.raynerweb.ipl.taskdone.util.Mask
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -46,31 +47,29 @@ class TaskFormFragment : Fragment() {
     }
 
     private fun subscribe() {
-        viewModel.showRequiredDescriptionMessage.observe(viewLifecycleOwner) {
-            if (it) {
-                binding.tilDescription.error = getString(R.string.required_field)
-            } else {
-                binding.tilDescription.error = null
+        viewModel.showDescriptionValidation.observe(viewLifecycleOwner) {
+            when (it) {
+                ValidationType.REQUIRED -> {
+                    binding.tilDescription.error = getString(R.string.required_field)
+                }
+                else -> binding.tilDescription.error = null
             }
         }
 
-        viewModel.showRequiredDateMessage.observe(viewLifecycleOwner) {
-            if (it) {
-                binding.tilDeadline.error = getString(R.string.required_field)
-                binding.ivCalendar.visibility = View.GONE
-            } else {
-                binding.tilDeadline.error = null
-                binding.ivCalendar.visibility = View.VISIBLE
-            }
-        }
-
-        viewModel.showInvalidDateMessage.observe(viewLifecycleOwner) {
-            if (it) {
-                binding.tilDeadline.error = getString(R.string.invalid_date)
-                binding.ivCalendar.visibility = View.GONE
-            } else {
-                binding.tilDeadline.error = null
-                binding.ivCalendar.visibility = View.VISIBLE
+        viewModel.showDateValidation.observe(viewLifecycleOwner) {
+            when (it) {
+                ValidationType.REQUIRED -> {
+                    binding.tilDeadline.error = getString(R.string.required_field)
+                    binding.ivCalendar.visibility = View.GONE
+                }
+                ValidationType.INVALID_FIELD -> {
+                    binding.tilDeadline.error = getString(R.string.invalid_date)
+                    binding.ivCalendar.visibility = View.GONE
+                }
+                else -> {
+                    binding.tilDescription.error = null
+                    binding.ivCalendar.visibility = View.VISIBLE
+                }
             }
         }
 

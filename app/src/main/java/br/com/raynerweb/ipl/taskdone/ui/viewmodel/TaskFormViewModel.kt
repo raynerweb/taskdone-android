@@ -11,6 +11,7 @@ import br.com.raynerweb.ipl.taskdone.repository.TaskRepository
 import br.com.raynerweb.ipl.taskdone.repository.UserRepository
 import br.com.raynerweb.ipl.taskdone.ui.model.Status
 import br.com.raynerweb.ipl.taskdone.ui.model.User
+import br.com.raynerweb.ipl.taskdone.ui.model.ValidationType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.ParseException
@@ -25,14 +26,11 @@ class TaskFormViewModel @Inject constructor(
     private val _taskSaved = SingleLiveEvent<Unit>()
     val taskSaved: LiveData<Unit> get() = _taskSaved
 
-    private val _showRequiredDescriptionMessage = MutableLiveData(false)
-    val showRequiredDescriptionMessage: LiveData<Boolean> get() = _showRequiredDescriptionMessage
+    private val _showDescriptionValidation = SingleLiveEvent<ValidationType>()
+    val showDescriptionValidation: LiveData<ValidationType> get() = _showDescriptionValidation
 
-    private val _showRequiredDateMessage = MutableLiveData(false)
-    val showRequiredDateMessage: LiveData<Boolean> get() = _showRequiredDateMessage
-
-    private val _showInvalidDateMessage = MutableLiveData(false)
-    val showInvalidDateMessage: LiveData<Boolean> get() = _showInvalidDateMessage
+    private val _showDateValidation = SingleLiveEvent<ValidationType>()
+    val showDateValidation: LiveData<ValidationType> get() = _showDateValidation
 
     private val _status = MutableLiveData(Status.BACKLOG)
     val status: LiveData<Status> get() = _status
@@ -48,12 +46,12 @@ class TaskFormViewModel @Inject constructor(
 
         if (TextUtils.isEmpty(getDescriptionText())) {
             valid = valid && false
-            _showRequiredDescriptionMessage.postValue(true)
+            _showDescriptionValidation.postValue(ValidationType.REQUIRED)
         }
 
         if (TextUtils.isEmpty(getDateText())) {
             valid = valid && false
-            _showRequiredDateMessage.postValue(true)
+            _showDateValidation.postValue(ValidationType.REQUIRED)
             return valid
         }
 
@@ -61,33 +59,17 @@ class TaskFormViewModel @Inject constructor(
             getDateText().toDate()
         } catch (e: ParseException) {
             valid = valid && false
-            _showInvalidDateMessage.postValue(true)
+            _showDateValidation.postValue(ValidationType.INVALID_FIELD)
         }
 
-        return valid
-    }
-
-    private fun isDateValid(): Boolean {
-        var valid = true
-        try {
-            getDateText().toDate()
-        } catch (e: ParseException) {
-            valid = valid && false
-            _showInvalidDateMessage.postValue(true)
-        }
         return valid
     }
 
     fun save() = viewModelScope.launch {
-        _showInvalidDateMessage.postValue(false)
-        _showRequiredDescriptionMessage.postValue(false)
-        _showRequiredDateMessage.postValue(false)
+        _showDescriptionValidation.postValue(ValidationType.VALID)
+        _showDateValidation.postValue(ValidationType.VALID)
 
         if (!isValid()) {
-            return@launch
-        }
-
-        if (!isDateValid()) {
             return@launch
         }
 

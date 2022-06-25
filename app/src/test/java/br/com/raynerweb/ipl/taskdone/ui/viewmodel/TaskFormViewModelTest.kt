@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import br.com.raynerweb.ipl.taskdone.repository.TaskRepository
 import br.com.raynerweb.ipl.taskdone.repository.UserRepository
 import br.com.raynerweb.ipl.taskdone.test.CoroutineTestRule
+import br.com.raynerweb.ipl.taskdone.ui.model.ValidationType
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.ObsoleteCoroutinesApi
@@ -51,11 +52,11 @@ class TaskFormViewModelTest {
     fun `Then description field needs to show the message Required Field`(): Unit =
         runBlocking {
 
-            val observer = spy<Observer<Boolean>>()
-            viewModel.showRequiredDescriptionMessage.observeForever(observer)
+            val observer = spy<Observer<ValidationType>>()
+            viewModel.showDescriptionValidation.observeForever(observer)
 
             viewModel.save()
-            verify(observer).onChanged(eq(true))
+            verify(observer).onChanged(eq(ValidationType.REQUIRED))
 
         }
 
@@ -70,11 +71,11 @@ class TaskFormViewModelTest {
     fun `And date field needs to show the message Required Field`(): Unit =
         runBlocking {
 
-            val observer = spy<Observer<Boolean>>()
-            viewModel.showRequiredDateMessage.observeForever(observer)
+            val observer = spy<Observer<ValidationType>>()
+            viewModel.showDateValidation.observeForever(observer)
 
             viewModel.save()
-            verify(observer).onChanged(eq(true))
+            verify(observer).onChanged(eq(ValidationType.REQUIRED))
 
         }
 
@@ -92,11 +93,19 @@ class TaskFormViewModelTest {
             viewModel.description.postValue("let's be strong")
             viewModel.date.postValue("01/12/2030")
 
-            val observer = spy<Observer<Unit>>()
-            viewModel.taskSaved.observeForever(observer)
+            val descriptionValidationObserver = spy<Observer<ValidationType>>()
+            viewModel.showDescriptionValidation.observeForever(descriptionValidationObserver)
+
+            val dateValidationObserver = spy<Observer<ValidationType>>()
+            viewModel.showDateValidation.observeForever(dateValidationObserver)
+
+            val taskObserver = spy<Observer<Unit>>()
+            viewModel.taskSaved.observeForever(taskObserver)
 
             viewModel.save()
-            verify(observer).onChanged(eq(null))
+            verify(descriptionValidationObserver).onChanged(eq(ValidationType.VALID))
+            verify(dateValidationObserver).onChanged(eq(ValidationType.VALID))
+            verify(taskObserver).onChanged(eq(null))
 
         }
 
@@ -114,11 +123,11 @@ class TaskFormViewModelTest {
             viewModel.description.postValue("A description")
             viewModel.date.postValue("99/99/9999")
 
-            val observer = spy<Observer<Boolean>>()
-            viewModel.showInvalidDateMessage.observeForever(observer)
+            val observer = spy<Observer<ValidationType>>()
+            viewModel.showDateValidation.observeForever(observer)
 
             viewModel.save()
-            verify(observer).onChanged(eq(true))
+            verify(observer).onChanged(eq(ValidationType.INVALID_FIELD))
 
         }
 
