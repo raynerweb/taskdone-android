@@ -13,6 +13,7 @@ import br.com.raynerweb.ipl.taskdone.ui.model.Status
 import br.com.raynerweb.ipl.taskdone.ui.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.text.ParseException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,11 +25,14 @@ class TaskFormViewModel @Inject constructor(
     private val _taskSaved = SingleLiveEvent<Unit>()
     val taskSaved: LiveData<Unit> get() = _taskSaved
 
-    private val _descriptionValidation = MutableLiveData(true)
-    val descriptionValidation: LiveData<Boolean> get() = _descriptionValidation
+    private val _showRequiredDescriptionMessage = MutableLiveData(false)
+    val showRequiredDescriptionMessage: LiveData<Boolean> get() = _showRequiredDescriptionMessage
 
-    private val _dateValidation = MutableLiveData(true)
-    val dateValidation: LiveData<Boolean> get() = _dateValidation
+    private val _showRequiredDateMessage = MutableLiveData(false)
+    val showRequiredDateMessage: LiveData<Boolean> get() = _showRequiredDateMessage
+
+    private val _showInvalidDateMessage = MutableLiveData(false)
+    val showInvalidDateMessage: LiveData<Boolean> get() = _showInvalidDateMessage
 
     private val _status = MutableLiveData(Status.BACKLOG)
     val status: LiveData<Status> get() = _status
@@ -40,21 +44,33 @@ class TaskFormViewModel @Inject constructor(
     private fun getDateText() = date.value ?: ""
 
     private fun isValid(): Boolean {
-        var validation = true
+        var valid = true
+
         if (TextUtils.isEmpty(getDescriptionText())) {
-            validation = validation || false
-            _descriptionValidation.postValue(false)
+            valid = valid && false
+            _showRequiredDescriptionMessage.postValue(true)
         }
+
         if (TextUtils.isEmpty(getDateText())) {
-            validation = validation || false
-            _dateValidation.postValue(false)
+            valid = valid && false
+            _showRequiredDateMessage.postValue(true)
+            return valid
         }
-        return validation
+
+        try {
+            getDateText().toDate()
+        } catch (e: ParseException) {
+            valid = valid && false
+            _showInvalidDateMessage.postValue(true)
+        }
+
+        return valid
     }
 
     fun save() = viewModelScope.launch {
-        _descriptionValidation.postValue(true)
-        _dateValidation.postValue(true)
+        _showRequiredDescriptionMessage.postValue(false)
+        _showRequiredDateMessage.postValue(false)
+        _showInvalidDateMessage.postValue(false)
 
         if (!isValid()) {
             return@launch

@@ -11,4 +11,8 @@
     <string name="in_progress">In Progress</string>
     <string name="completed">Completed</string>
     <string name="save">Save</string>
+
+    <!-- validation message -->
+    <string name="required_field">Required Field</string>
+    <string name="invalid_date">Invalid date</string>
 </resources>
