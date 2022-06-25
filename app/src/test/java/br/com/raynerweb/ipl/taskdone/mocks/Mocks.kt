@@ -28,4 +28,7 @@ object Mocks {
     val USER_TASK = UserTasks(
         user = USER, tasks = listOf(TASK)
     )
+    val USER_EMPTY_TASK = UserTasks(
+        user = USER, tasks = emptyList()
+    )
 }

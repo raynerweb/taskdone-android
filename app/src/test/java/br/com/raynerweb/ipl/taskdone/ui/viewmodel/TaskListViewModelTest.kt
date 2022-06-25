@@ -4,6 +4,8 @@ import androidx.annotation.CallSuper
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import br.com.raynerweb.ipl.taskdone.mocks.Mocks.TASK
+import br.com.raynerweb.ipl.taskdone.mocks.Mocks.USER
+import br.com.raynerweb.ipl.taskdone.mocks.Mocks.USER_EMPTY_TASK
 import br.com.raynerweb.ipl.taskdone.mocks.Mocks.USER_TASK
 import br.com.raynerweb.ipl.taskdone.repository.TaskRepository
 import br.com.raynerweb.ipl.taskdone.repository.UserRepository
@@ -52,7 +54,7 @@ class TaskListViewModelTest {
     @Test
     fun `Then the user needs to see a message You dont have a task here`(): Unit =
         runBlocking {
-            whenever(userRepository.findAll()).thenReturn(listOf(USER_TASK))
+            whenever(userRepository.findAll()).thenReturn(listOf(USER_EMPTY_TASK))
             val observer = spy<Observer<Unit>>()
             viewModel.emptyTaskList.observeForever(observer)
 
@@ -88,15 +90,48 @@ class TaskListViewModelTest {
     @Test
     fun `Then the task is deleted`(): Unit =
         runBlocking {
+            whenever(taskRepository.delete(any())).thenReturn(Unit)
 
-//            viewModel.deleteTask()
-            whenever(userRepository.findAll()).thenReturn(listOf(USER_TASK))
-            val observer = spy<Observer<List<Task>>>()
-            viewModel.taskList.observeForever(observer)
+            val taskDeletedObsever = spy<Observer<Pair<Task, Int>>>()
+            viewModel.taskDeleted.observeForever(taskDeletedObsever)
 
-            viewModel.findAll()
-            verify(observer).onChanged(eq(listOf(TASK)))
+            viewModel.deleteTask(TASK, 1)
 
+            verify(taskDeletedObsever).onChanged(eq(Pair(TASK, 1)))
+        }
+
+    /**
+     * Scenario 3 - Delete Task
+     * Given the user is on the task list page
+     * When the user clicks on the trash icon from the task item
+     * Then the task is deleted and empty list need to be shown
+     */
+    @Test
+    fun `Then the task is deleted and empty list need to be shown`(): Unit =
+        runBlocking {
+            val emptyListObsever = spy<Observer<Unit>>()
+            viewModel.emptyTaskList.observeForever(emptyListObsever)
+
+            viewModel.checkEmptyList(emptyList())
+
+            verify(emptyListObsever).onChanged(null)
+        }
+
+    /**
+     * Scenario 3 - Delete Task
+     * Given the user is on the task list page
+     * When the user clicks on the trash icon from the task item
+     * Then the task is deleted and empty list need to be shown
+     */
+    @Test
+    fun `Then the task is deleted and empty list cannot be called`(): Unit =
+        runBlocking {
+            val emptyListObsever = spy<Observer<Unit>>()
+            viewModel.emptyTaskList.observeForever(emptyListObsever)
+
+            viewModel.checkEmptyList(listOf(TASK))
+
+            verifyZeroInteractions(emptyListObsever)
         }
 
 }
