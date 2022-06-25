@@ -1,7 +1,8 @@
-package br.com.raynerweb.ipl.taskdone
+package br.com.raynerweb.ipl.taskdone.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import br.com.raynerweb.ipl.taskdone.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
