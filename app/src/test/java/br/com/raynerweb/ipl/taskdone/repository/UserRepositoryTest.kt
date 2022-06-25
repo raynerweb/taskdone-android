@@ -1,9 +1,9 @@
 package br.com.raynerweb.ipl.taskdone.repository
 
+import br.com.raynerweb.ipl.taskdone.mocks.Mocks.USER
+import br.com.raynerweb.ipl.taskdone.mocks.Mocks.USER_ENTITY
 import br.com.raynerweb.ipl.taskdone.repository.impl.UserRepositoryImpl
 import br.com.raynerweb.ipl.taskdone.repository.local.dao.UserDao
-import br.com.raynerweb.ipl.taskdone.repository.local.entity.UserEntity
-import br.com.raynerweb.ipl.taskdone.ui.model.User
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -20,13 +20,13 @@ class UserRepositoryTest {
 
     @Test
     fun `Should save user with success`() = runBlocking {
-        repository.save(user())
+        repository.save(USER)
         verify(userDao).save(any())
     }
 
     @Test
     fun `Should find user by email`() = runBlocking {
-        whenever(userDao.findByEmail(any())).thenReturn(userEntity())
+        whenever(userDao.findByEmail(any())).thenReturn(USER_ENTITY)
         val user = repository.findByEmail("email@email.com")
         assertNotNull(user)
     }
@@ -37,16 +37,5 @@ class UserRepositoryTest {
         val user = repository.findByEmail("email@email.com")
         assertNull(user)
     }
-
-    private fun userEntity() = UserEntity(
-        userId = 1,
-        email = "email@email.com",
-        name = "Rayner",
-    )
-
-    private fun user() = User(
-        email = "raynerweb@gmail.com",
-        name = "Rayner"
-    )
 
 }
