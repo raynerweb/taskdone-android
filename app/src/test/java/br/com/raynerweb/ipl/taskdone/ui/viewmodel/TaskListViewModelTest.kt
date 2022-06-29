@@ -63,6 +63,23 @@ class TaskListViewModelTest {
         }
 
     /**
+     * Scenario 2 - Task List empty user
+     * Given the user is on the task list screen
+     * When the task list is empty
+     * Then the user needs to see a message: "You don’t have a task here"
+     */
+    @Test
+    fun `Scenario 2 - Task List empty user - Then the user needs to see a message You dont have a task here`(): Unit =
+        runBlocking {
+            whenever(userRepository.findAll()).thenReturn(emptyList())
+            val observer = spy<Observer<Unit>>()
+            viewModel.emptyTaskList.observeForever(observer)
+
+            viewModel.findAll()
+            verify(observer).onChanged(null)
+        }
+
+    /**
      * Scenario 3 - Task List
      * Given the user is on the task list screen
      * When the user has tasks to be shown

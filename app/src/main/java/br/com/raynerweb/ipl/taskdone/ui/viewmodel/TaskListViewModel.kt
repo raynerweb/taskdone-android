@@ -39,7 +39,12 @@ class TaskListViewModel @Inject constructor(
     }
 
     fun findAll() = viewModelScope.launch {
-        val tasks = userRepository.findAll()[0].tasks
+        val userTasks = userRepository.findAll()
+        if (userTasks.isEmpty()) {
+            _emptyTaskList.call()
+            return@launch
+        }
+        val tasks = userTasks[0].tasks
         if (tasks.isEmpty()) {
             _emptyTaskList.call()
         } else {
