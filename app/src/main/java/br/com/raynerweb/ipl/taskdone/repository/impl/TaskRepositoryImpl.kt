@@ -2,6 +2,7 @@ package br.com.raynerweb.ipl.taskdone.repository.impl
 
 import br.com.raynerweb.ipl.taskdone.ext.toTaskEntity
 import br.com.raynerweb.ipl.taskdone.repository.TaskRepository
+import br.com.raynerweb.ipl.taskdone.repository.firebase.realtime.TaskReferenceRepository
 import br.com.raynerweb.ipl.taskdone.repository.local.dao.TaskDao
 import br.com.raynerweb.ipl.taskdone.repository.local.dao.UserDao
 import br.com.raynerweb.ipl.taskdone.repository.local.dao.UserTaskDao
@@ -20,16 +21,20 @@ import javax.inject.Singleton
 class TaskRepositoryImpl @Inject constructor(
     private val userDao: UserDao,
     private val taskDao: TaskDao,
-    private val userTaskDao: UserTaskDao
+    private val userTaskDao: UserTaskDao,
+    private val taskReferenceRepository: TaskReferenceRepository
 ) : TaskRepository {
 
     override suspend fun save(user: User, description: String, date: Date, status: Status) {
         withContext(context = Dispatchers.IO) {
+            val remoteId = taskReferenceRepository.save(description, date, status.name)
             val taskId = taskDao.save(
                 TaskEntity(
+                    remoteId = remoteId,
                     description = description,
                     date = date,
-                    status = status.name
+                    status = status.name,
+                    creationDate = Date()
                 )
             )
             userDao.findByEmail(user.email)?.let { userEntity ->

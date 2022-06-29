@@ -1,4 +1,6 @@
 app/release
+app/src/dev/google-services.json
+app/src/prd/google-services.json
 *.iml
 .gradle
 .idea/

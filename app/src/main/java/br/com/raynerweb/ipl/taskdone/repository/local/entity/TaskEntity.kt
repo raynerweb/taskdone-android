@@ -8,8 +8,9 @@ import java.util.*
 data class TaskEntity(
     @PrimaryKey(autoGenerate = true)
     val taskId: Long = 0,
-    val remoteId: Long = 0,
+    val remoteId: String = "",
     val description: String,
     val date: Date,
-    val status: String
+    val status: String,
+    val creationDate: Date
 )
