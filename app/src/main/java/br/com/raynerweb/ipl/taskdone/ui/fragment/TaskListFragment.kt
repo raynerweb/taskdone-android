@@ -1,10 +1,11 @@
 package br.com.raynerweb.ipl.taskdone.ui.fragment
 
+import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -23,6 +24,7 @@ class TaskListFragment : Fragment() {
     private val viewModel: TaskListViewModel by viewModels()
 
     private lateinit var taskAdapter: TaskAdapter
+    private var filteringByDate = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,13 +40,52 @@ class TaskListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         setupViews()
         subscribe()
 
         viewModel.findAll()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_filter, menu)
+
+        val searchItem: MenuItem = menu.findItem(R.id.action_search)
+        val searchManager =
+            requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchView = searchItem.actionView as SearchView
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
+
+        searchView.apply {
+            maxWidth = Integer.MAX_VALUE
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+//                    viewModel.filter(newText)
+                    return true
+                }
+            })
+        }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val clearFilterByDate = menu.findItem(R.id.action_clear_filter_by_date)
+        clearFilterByDate.isVisible = filteringByDate
+
+        val filterByDate = menu.findItem(R.id.action_filter_by_date)
+        filterByDate.isVisible = !filteringByDate
+    }
+
+    private fun setupToolbar() {
+        setHasOptionsMenu(true)
+    }
+
     private fun setupViews() {
+        setupToolbar()
         taskAdapter = TaskAdapter(mutableListOf(), { task, position ->
             viewModel.deleteTask(task, position)
         }, {
@@ -65,13 +106,15 @@ class TaskListFragment : Fragment() {
             val shareMessage =
                 """
                 Message: ${task.description}
+                
                 Date: ${task.date}
+                
                 Status: ${task.status.name}
                 
                 https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}
                 """.trimIndent()
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
-            startActivity(Intent.createChooser(shareIntent, "choose one"))
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.choose_one)))
         }
 
         viewModel.taskDeleted.observe(viewLifecycleOwner) {
