@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -35,6 +36,19 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    flavorDimensions 'environment'
+    productFlavors {
+        all {
+        }
+        dev {
+            dimension 'environment'
+            applicationId 'br.com.raynerweb.ipl.taskdone.dev'
+        }
+        prd {
+            dimension 'environment'
+            applicationId 'br.com.raynerweb.ipl.taskdone'
+        }
     }
 }
 
@@ -83,6 +97,18 @@ dependencies {
 //    implementation 'com.github.genaku:input-mask-android:4.2.2'
 //    implementation 'com.github.RedMadRobot:input-mask-android:6.1.0'
 //    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.6.21'
+
+
+    // Import the Firebase BoM
+    implementation platform('com.google.firebase:firebase-bom:30.2.0')
+
+    // Add the dependency for the Firebase SDK for Google Analytics
+    // When using the BoM, don't specify versions in Firebase dependencies
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    // Declare the dependency for the Realtime Database library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-database-ktx'
+
 
     /** Tests **/
     testImplementation 'junit:junit:4.13.2'
