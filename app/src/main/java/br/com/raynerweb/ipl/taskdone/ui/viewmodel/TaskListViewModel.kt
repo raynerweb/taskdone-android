@@ -1,11 +1,10 @@
 package br.com.raynerweb.ipl.taskdone.ui.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import br.com.raynerweb.ipl.taskdone.core.SingleLiveEvent
 import br.com.raynerweb.ipl.taskdone.repository.TaskRepository
 import br.com.raynerweb.ipl.taskdone.repository.UserRepository
+import br.com.raynerweb.ipl.taskdone.ui.model.Status
 import br.com.raynerweb.ipl.taskdone.ui.model.Task
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,8 +16,10 @@ class TaskListViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
-    private val _taskList = SingleLiveEvent<List<Task>>()
-    val taskList: LiveData<List<Task>> get() = _taskList
+    val statusFilter = SingleLiveEvent<Status?>()
+
+    private val _taskList = MutableLiveData<List<Task>>()
+    val taskList = MediatorLiveData<List<Task>>()
 
     private val _emptyTaskList = SingleLiveEvent<Unit>()
     val emptyTaskList: LiveData<Unit> get() = _emptyTaskList
@@ -28,6 +29,26 @@ class TaskListViewModel @Inject constructor(
 
     private val _taskShared = SingleLiveEvent<Task>()
     val taskShared: LiveData<Task> get() = _taskShared
+
+    init {
+        taskList.addSource(statusFilter) {
+            filter()
+        }
+    }
+
+    private fun filter() {
+        val list = mutableListOf<Task>()
+
+        _taskList.value?.let { tasks ->
+            statusFilter.value?.let { status ->
+                list.addAll(tasks.filter { task -> task.status == status })
+            } ?: run {
+                list.addAll(tasks)
+            }
+        }
+
+        taskList.value = list
+    }
 
     fun deleteTask(task: Task, position: Int) = viewModelScope.launch {
         taskRepository.delete(task)

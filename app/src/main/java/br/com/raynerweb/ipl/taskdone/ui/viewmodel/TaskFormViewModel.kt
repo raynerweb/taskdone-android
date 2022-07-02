@@ -32,7 +32,7 @@ class TaskFormViewModel @Inject constructor(
     private val _showDateValidation = SingleLiveEvent<ValidationType>()
     val showDateValidation: LiveData<ValidationType> get() = _showDateValidation
 
-    private val _status = MutableLiveData(Status.BACKLOG)
+    private val _status = MutableLiveData(Status.TODO)
     val status: LiveData<Status> get() = _status
 
     val description = MutableLiveData("")
@@ -77,7 +77,7 @@ class TaskFormViewModel @Inject constructor(
             DEFAULT_USER,
             getDescriptionText(),
             getDateText().toDate(),
-            status.value ?: Status.BACKLOG
+            status.value ?: Status.TODO
         )
 
         _taskSaved.call()
