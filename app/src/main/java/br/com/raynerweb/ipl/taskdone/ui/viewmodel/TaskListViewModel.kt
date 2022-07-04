@@ -16,7 +16,10 @@ class TaskListViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
-    val statusFilter = SingleLiveEvent<Status?>()
+    private val _toggleStatusFilter = SingleLiveEvent<Unit>()
+    val toggleStatusFilter: LiveData<Unit> get() = _toggleStatusFilter
+
+    private val _statusFilter = SingleLiveEvent<Status?>()
 
     private val _taskList = MutableLiveData<List<Task>>()
     val taskList = MediatorLiveData<List<Task>>()
@@ -31,7 +34,7 @@ class TaskListViewModel @Inject constructor(
     val taskShared: LiveData<Task> get() = _taskShared
 
     init {
-        taskList.addSource(statusFilter) {
+        taskList.addSource(_statusFilter) {
             filter()
         }
     }
@@ -40,7 +43,7 @@ class TaskListViewModel @Inject constructor(
         val list = mutableListOf<Task>()
 
         _taskList.value?.let { tasks ->
-            statusFilter.value?.let { status ->
+            _statusFilter.value?.let { status ->
                 list.addAll(tasks.filter { task -> task.status == status })
             } ?: run {
                 list.addAll(tasks)
@@ -48,6 +51,14 @@ class TaskListViewModel @Inject constructor(
         }
 
         taskList.value = list
+    }
+
+    fun showStatusFilter() {
+        _toggleStatusFilter.call()
+    }
+
+    fun setStatusFilter(status: Status?){
+        _statusFilter.postValue(status)
     }
 
     fun deleteTask(task: Task, position: Int) = viewModelScope.launch {

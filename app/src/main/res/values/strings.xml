@@ -20,4 +20,6 @@
     <string name="clear_filter_by_date">Clear the filter by date</string>
     <string name="search">Search</string>
     <string name="choose_one">Choose one</string>
+    <string name="status_filter">Status Filter</string>
+    <string name="all">All</string>
 </resources>

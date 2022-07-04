@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.RadioGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,8 +13,11 @@ import androidx.navigation.fragment.findNavController
 import br.com.raynerweb.ipl.taskdone.BuildConfig
 import br.com.raynerweb.ipl.taskdone.R
 import br.com.raynerweb.ipl.taskdone.databinding.FragmentTaskListBinding
+import br.com.raynerweb.ipl.taskdone.databinding.ViewStatusFilterBinding
 import br.com.raynerweb.ipl.taskdone.ui.adapter.TaskAdapter
+import br.com.raynerweb.ipl.taskdone.ui.model.Status
 import br.com.raynerweb.ipl.taskdone.ui.viewmodel.TaskListViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -22,6 +26,9 @@ class TaskListFragment : Fragment() {
 
     private lateinit var binding: FragmentTaskListBinding
     private val viewModel: TaskListViewModel by viewModels()
+
+    private lateinit var viewStatusFilterBinding: ViewStatusFilterBinding
+    private lateinit var statusFilterDialog: BottomSheetDialog
 
     private lateinit var taskAdapter: TaskAdapter
     private var filteringByDate = false
@@ -39,7 +46,6 @@ class TaskListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         setupViews()
         subscribe()
@@ -80,12 +86,31 @@ class TaskListFragment : Fragment() {
         filterByDate.isVisible = !filteringByDate
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_filter_by_status) {
+            viewModel.showStatusFilter()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun setupToolbar() {
         setHasOptionsMenu(true)
     }
 
+    private fun setupStatusFilterDialog() {
+        val inflater = LayoutInflater.from(requireContext())
+        viewStatusFilterBinding = ViewStatusFilterBinding.inflate(inflater)
+        viewStatusFilterBinding.fragment = this
+        viewStatusFilterBinding.viewModel = viewModel
+        viewStatusFilterBinding.lifecycleOwner = this
+
+        statusFilterDialog = BottomSheetDialog(requireContext())
+        statusFilterDialog.setContentView(viewStatusFilterBinding.root)
+    }
+
     private fun setupViews() {
         setupToolbar()
+        setupStatusFilterDialog()
         taskAdapter = TaskAdapter(mutableListOf(), { task, position ->
             viewModel.deleteTask(task, position)
         }, {
@@ -96,6 +121,10 @@ class TaskListFragment : Fragment() {
     }
 
     private fun subscribe() {
+        viewModel.toggleStatusFilter.observe(viewLifecycleOwner) {
+            statusFilterDialog.show()
+        }
+
         viewModel.taskShared.observe(viewLifecycleOwner) { task ->
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "text/plain"
@@ -132,6 +161,16 @@ class TaskListFragment : Fragment() {
             taskAdapter.updateTasks(mutableListOf())
             binding.tvEmptyListMessage.visibility = View.VISIBLE
         }
+    }
+
+    fun statusSelected(radioGroup: RadioGroup, id: Int) {
+        when (id) {
+            viewStatusFilterBinding.rbBacklog.id -> viewModel.setStatusFilter(Status.TODO)
+            viewStatusFilterBinding.rbProgress.id -> viewModel.setStatusFilter(Status.IN_PROGRESS)
+            viewStatusFilterBinding.rbCompleted.id -> viewModel.setStatusFilter(Status.DONE)
+            else -> viewModel.setStatusFilter(null)
+        }
+        statusFilterDialog.dismiss()
     }
 
     fun addTask(view: View) {

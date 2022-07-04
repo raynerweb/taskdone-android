@@ -54,14 +54,12 @@ class TaskListFiltersViewModelTest {
     @Test
     fun `Then I should see all Status option`(): Unit =
         runBlocking {
-            whenever(userRepository.findAll()).thenReturn(listOf(MOCK_FILTERS))
-            val observer = spy<Observer<List<Task>>>()
-            viewModel.taskList.observeForever(observer)
+            val toggleStatusFilterObserver = spy<Observer<Unit>>()
+            viewModel.toggleStatusFilter.observeForever(toggleStatusFilterObserver)
 
-            viewModel.findAll()
-            viewModel.statusFilter.postValue(Status.TODO)
+            viewModel.showStatusFilter()
 
-            verify(observer).onChanged(eq(Mocks.MOCK_TASKS.filter { task -> task.status == Status.TODO }))
+            verify(toggleStatusFilterObserver).onChanged(null)
         }
 
 
@@ -79,7 +77,7 @@ class TaskListFiltersViewModelTest {
             viewModel.taskList.observeForever(observer)
 
             viewModel.findAll()
-            viewModel.statusFilter.postValue(Status.TODO)
+            viewModel.setStatusFilter(Status.TODO)
 
             verify(observer).onChanged(eq(Mocks.MOCK_TASKS.filter { task -> task.status == Status.TODO }))
         }
@@ -98,7 +96,7 @@ class TaskListFiltersViewModelTest {
             viewModel.taskList.observeForever(observer)
 
             viewModel.findAll()
-            viewModel.statusFilter.postValue(Status.IN_PROGRESS)
+            viewModel.setStatusFilter(Status.IN_PROGRESS)
 
             verify(observer).onChanged(eq(Mocks.MOCK_TASKS.filter { task -> task.status == Status.IN_PROGRESS }))
         }
@@ -117,7 +115,7 @@ class TaskListFiltersViewModelTest {
             viewModel.taskList.observeForever(observer)
 
             viewModel.findAll()
-            viewModel.statusFilter.postValue(Status.DONE)
+            viewModel.setStatusFilter(Status.DONE)
 
             verify(observer).onChanged(eq(Mocks.MOCK_TASKS.filter { task -> task.status == Status.DONE }))
         }
@@ -136,7 +134,7 @@ class TaskListFiltersViewModelTest {
             viewModel.taskList.observeForever(observer)
 
             viewModel.findAll()
-            viewModel.statusFilter.postValue(null)
+            viewModel.setStatusFilter(null)
 
             verify(observer).onChanged(eq(Mocks.MOCK_TASKS))
         }
