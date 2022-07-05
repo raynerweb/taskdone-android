@@ -34,6 +34,9 @@ class TaskListViewModel @Inject constructor(
     val taskShared: LiveData<Task> get() = _taskShared
 
     init {
+        taskList.addSource(_taskList) {
+            filter()
+        }
         taskList.addSource(_statusFilter) {
             filter()
         }
