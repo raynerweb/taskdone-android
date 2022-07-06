@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">TaskDone</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_task">Add Task</string>
     <string name="no_tasks_message">You don’t have a task here</string>
@@ -13,9 +12,14 @@
     <string name="save">Save</string>
     <string name="share">Share</string>
     <string name="delete">Delete</string>
-
-    <!-- validation message -->
     <string name="required_field">Required Field</string>
     <string name="invalid_date">Invalid date</string>
     <string name="select_date">Select date</string>
+    <string name="filter_by_status">Filter by status</string>
+    <string name="filter_by_date">Filter by date</string>
+    <string name="clear_filter_by_date">Clear the filter by date</string>
+    <string name="search">Search</string>
+    <string name="choose_one">Choose one</string>
+    <string name="status_filter">Status Filter</string>
+    <string name="all">All</string>
 </resources>

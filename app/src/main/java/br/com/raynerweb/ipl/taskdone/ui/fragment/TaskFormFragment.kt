@@ -93,9 +93,9 @@ class TaskFormFragment : Fragment() {
 
     fun statusSelected(radioGroup: RadioGroup, id: Int) {
         when (id) {
-            binding.rbBacklog.id -> viewModel.setStatus(Status.BACKLOG)
+            binding.rbBacklog.id -> viewModel.setStatus(Status.TODO)
             binding.rbProgress.id -> viewModel.setStatus(Status.IN_PROGRESS)
-            binding.rbCompleted.id -> viewModel.setStatus(Status.COMPLETED)
+            binding.rbCompleted.id -> viewModel.setStatus(Status.DONE)
         }
     }
 

@@ -1,11 +1,10 @@
 package br.com.raynerweb.ipl.taskdone.ui.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import br.com.raynerweb.ipl.taskdone.core.SingleLiveEvent
 import br.com.raynerweb.ipl.taskdone.repository.TaskRepository
 import br.com.raynerweb.ipl.taskdone.repository.UserRepository
+import br.com.raynerweb.ipl.taskdone.ui.model.Status
 import br.com.raynerweb.ipl.taskdone.ui.model.Task
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,8 +16,15 @@ class TaskListViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
-    private val _taskList = SingleLiveEvent<List<Task>>()
-    val taskList: LiveData<List<Task>> get() = _taskList
+
+    private val _toggleStatusFilter = SingleLiveEvent<Unit>()
+    val toggleStatusFilter: LiveData<Unit> get() = _toggleStatusFilter
+
+    private val _descriptionFilter = SingleLiveEvent<String?>()
+    private val _statusFilter = SingleLiveEvent<Status?>()
+
+    private val _taskList = MutableLiveData<List<Task>>()
+    val taskList = MediatorLiveData<List<Task>>()
 
     private val _emptyTaskList = SingleLiveEvent<Unit>()
     val emptyTaskList: LiveData<Unit> get() = _emptyTaskList
@@ -28,6 +34,48 @@ class TaskListViewModel @Inject constructor(
 
     private val _taskShared = SingleLiveEvent<Task>()
     val taskShared: LiveData<Task> get() = _taskShared
+
+    init {
+        taskList.addSource(_taskList) {
+            filter()
+        }
+        taskList.addSource(_statusFilter) {
+            filter()
+        }
+        taskList.addSource(_descriptionFilter) {
+            filter()
+        }
+    }
+
+    private fun filter() {
+        var filtered = listOf<Task>()
+
+        _taskList.value?.let { tasks ->
+            filtered = tasks
+
+            _statusFilter.value?.let { status ->
+                filtered = tasks.filter { task -> task.status == status }
+            }
+
+            _descriptionFilter.value?.let { description ->
+                filtered = filtered.filter { task -> task.description.contains(description) }
+            }
+        }
+
+        taskList.value = filtered
+    }
+
+    fun showStatusFilter() {
+        _toggleStatusFilter.call()
+    }
+
+    fun setStatusFilter(status: Status?) {
+        _statusFilter.postValue(status)
+    }
+
+    fun setDescriptionFilter(description: String?) {
+        _descriptionFilter.postValue(description)
+    }
 
     fun deleteTask(task: Task, position: Int) = viewModelScope.launch {
         taskRepository.delete(task)
