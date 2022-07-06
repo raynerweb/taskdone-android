@@ -71,7 +71,7 @@ class TaskListFragment : Fragment() {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-//                    viewModel.filter(newText)
+                    viewModel.setDescriptionFilter(newText)
                     return true
                 }
             })

@@ -139,4 +139,71 @@ class TaskListFiltersViewModelTest {
             verify(observer).onChanged(eq(Mocks.MOCK_TASKS))
         }
 
+    /**
+     * Scenario 5 - Filter by description
+     * Given I am in task list screen
+     * When I want to search for a task by description
+     * Then I must click on the magnifier button
+     * And enter a description in the search bar
+     */
+    @Test
+    fun `Then I must click on the magnifier button And enter a description in the search bar`(): Unit =
+        runBlocking {
+            whenever(userRepository.findAll()).thenReturn(listOf(MOCK_FILTERS))
+
+            val observer = spy<Observer<List<Task>>>()
+            viewModel.taskList.observeForever(observer)
+
+            val description = "ca"
+            viewModel.findAll()
+            viewModel.setDescriptionFilter(description)
+
+            verify(observer).onChanged(eq(Mocks.MOCK_TASKS.filter { task -> task.description.contains(description) }))
+        }
+
+    /**
+     * Scenario 6 - Clear Filter by Description
+     * Given I am in task list screen
+     * When I want to clear the search by description
+     * Then I should click on the [X] in the search bar
+     */
+    @Test
+    fun `Then I should click on the X in the search bar`(): Unit =
+        runBlocking {
+            whenever(userRepository.findAll()).thenReturn(listOf(MOCK_FILTERS))
+
+            val observer = spy<Observer<List<Task>>>()
+            viewModel.taskList.observeForever(observer)
+
+            val description = null
+            viewModel.findAll()
+            viewModel.setDescriptionFilter(description)
+
+            verify(observer, times(2)).onChanged(eq(Mocks.MOCK_TASKS))
+        }
+
+    /**
+     * Scenario 7 - Filter by date
+     * Given I am in task list screen
+     * When I want to search for a task by date
+     * Then I must click on the calendar button
+     * And choose the time period
+     */
+    @Test
+    fun `Then I must click on the calendar button And choose the time period`(): Unit =
+        runBlocking {
+            //TODO("And enter a description in the search bar")
+        }
+
+    /**
+     * Scenario 8 - Clear Filter by Date
+     * Given I am in task list screen
+     * When I want to clear the search by date
+     * Then I should click in the broom button
+     */
+    @Test
+    fun `Then I should click in the broom button`(): Unit =
+        runBlocking {
+            //TODO("And enter a description in the search bar")
+        }
 }
