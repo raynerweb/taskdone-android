@@ -34,9 +34,6 @@ class TaskListViewModel @Inject constructor(
     private val _taskList = MutableLiveData<List<Task>>()
     val taskList = MediatorLiveData<List<Task>>()
 
-    private val _emptyTaskList = SingleLiveEvent<Unit>()
-    val emptyTaskList: LiveData<Unit> get() = _emptyTaskList
-
     private val _taskDeleted = SingleLiveEvent<Pair<Task, Int>>()
     val taskDeleted: LiveData<Pair<Task, Int>> get() = _taskDeleted
 
@@ -107,21 +104,11 @@ class TaskListViewModel @Inject constructor(
     fun findAll() = viewModelScope.launch {
         val userTasks = userRepository.findAll()
         if (userTasks.isEmpty()) {
-            _emptyTaskList.call()
+            _taskList.postValue(emptyList())
             return@launch
         }
         val tasks = userTasks[0].tasks
-        if (tasks.isEmpty()) {
-            _emptyTaskList.call()
-        } else {
-            _taskList.postValue(tasks)
-        }
-    }
-
-    fun checkEmptyList(tasks: List<Task>) {
-        if (tasks.isEmpty()) {
-            _emptyTaskList.call()
-        }
+        _taskList.postValue(tasks)
     }
 
     fun setDateFilter(initial: Date?, final: Date?) {

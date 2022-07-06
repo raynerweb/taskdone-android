@@ -179,18 +179,21 @@ class TaskListFragment : Fragment() {
         viewModel.taskDeleted.observe(viewLifecycleOwner) {
             taskAdapter.notifyItemRemoved(it.second)
             taskAdapter.tasks.remove(it.first)
-            viewModel.checkEmptyList(taskAdapter.tasks)
+            if (taskAdapter.tasks.isEmpty()) {
+                viewModel.findAll()
+            }
         }
 
         viewModel.taskList.observe(viewLifecycleOwner) { tasks ->
+            if (tasks.isEmpty()) {
+                binding.tvEmptyListMessage.visibility = View.VISIBLE
+            } else {
+                binding.tvEmptyListMessage.visibility = View.GONE
+            }
             taskAdapter.updateTasks(tasks.toMutableList())
-            binding.tvEmptyListMessage.visibility = View.GONE
+
         }
 
-        viewModel.emptyTaskList.observe(viewLifecycleOwner) {
-            taskAdapter.updateTasks(mutableListOf())
-            binding.tvEmptyListMessage.visibility = View.VISIBLE
-        }
     }
 
     fun statusSelected(radioGroup: RadioGroup, id: Int) {
