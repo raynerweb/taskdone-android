@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import br.com.raynerweb.ipl.taskdone.R
 import br.com.raynerweb.ipl.taskdone.databinding.FragmentTaskFormBinding
-import br.com.raynerweb.ipl.taskdone.ext.toDate
+import br.com.raynerweb.ipl.taskdone.ext.toFormattedDate
 import br.com.raynerweb.ipl.taskdone.ui.model.Status
 import br.com.raynerweb.ipl.taskdone.ui.model.ValidationType
 import br.com.raynerweb.ipl.taskdone.ui.viewmodel.TaskFormViewModel
@@ -85,7 +85,7 @@ class TaskFormFragment : Fragment() {
             .build()
 
         datePicker.addOnPositiveButtonClickListener {
-            binding.etDeadline.setText(it.toDate())
+            binding.etDeadline.setText(it.toFormattedDate())
         }
 
         datePicker.show(parentFragmentManager, TAG)

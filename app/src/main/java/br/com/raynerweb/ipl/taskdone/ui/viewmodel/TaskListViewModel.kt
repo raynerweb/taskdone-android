@@ -2,12 +2,14 @@ package br.com.raynerweb.ipl.taskdone.ui.viewmodel
 
 import androidx.lifecycle.*
 import br.com.raynerweb.ipl.taskdone.core.SingleLiveEvent
+import br.com.raynerweb.ipl.taskdone.ext.toDate
 import br.com.raynerweb.ipl.taskdone.repository.TaskRepository
 import br.com.raynerweb.ipl.taskdone.repository.UserRepository
 import br.com.raynerweb.ipl.taskdone.ui.model.Status
 import br.com.raynerweb.ipl.taskdone.ui.model.Task
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,10 +18,16 @@ class TaskListViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
+    private val _dateFilterActive = MutableLiveData(false)
+    val dateFilterActive: LiveData<Boolean> get() = _dateFilterActive
+
+    private val _toggleDateFilter = SingleLiveEvent<Unit>()
+    val toggleDateFilter: LiveData<Unit> get() = _toggleDateFilter
 
     private val _toggleStatusFilter = SingleLiveEvent<Unit>()
     val toggleStatusFilter: LiveData<Unit> get() = _toggleStatusFilter
 
+    private val _dateFilter = SingleLiveEvent<Pair<Date, Date>?>()
     private val _descriptionFilter = SingleLiveEvent<String?>()
     private val _statusFilter = SingleLiveEvent<Status?>()
 
@@ -45,6 +53,9 @@ class TaskListViewModel @Inject constructor(
         taskList.addSource(_descriptionFilter) {
             filter()
         }
+        taskList.addSource(_dateFilter) {
+            filter()
+        }
     }
 
     private fun filter() {
@@ -59,6 +70,13 @@ class TaskListViewModel @Inject constructor(
 
             _descriptionFilter.value?.let { description ->
                 filtered = filtered.filter { task -> task.description.contains(description) }
+            }
+
+            _dateFilter.value?.let { dateInterval ->
+                filtered = filtered.filter { task ->
+                    task.date.toDate().after(dateInterval.first) &&
+                            task.date.toDate().before(dateInterval.second)
+                }
             }
         }
 
@@ -104,6 +122,21 @@ class TaskListViewModel @Inject constructor(
         if (tasks.isEmpty()) {
             _emptyTaskList.call()
         }
+    }
+
+    fun setDateFilter(initial: Date?, final: Date?) {
+        if (initial != null && final != null) {
+            _dateFilter.postValue(Pair(initial, final))
+            _dateFilterActive.postValue(true)
+        } else {
+            _dateFilter.postValue(null)
+            _dateFilterActive.postValue(false)
+        }
+
+    }
+
+    fun showDateFilter() {
+        _toggleDateFilter.call()
     }
 
 }

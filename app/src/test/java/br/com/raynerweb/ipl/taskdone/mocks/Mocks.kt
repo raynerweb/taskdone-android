@@ -42,19 +42,19 @@ object Mocks {
         Task(
             taskId = "1",
             description = "ar",
-            date = SimpleDateFormat("dd/MM/yyyy").format(Date()),
+            date = "10/01/2022",
             status = Status.TODO
         ),
         Task(
             taskId = "2",
             description = "arara",
-            date = SimpleDateFormat("dd/MM/yyyy").format(Date()),
+            date = "15/01/2022",
             status = Status.IN_PROGRESS
         ),
         Task(
             taskId = "3",
             description = "araras",
-            date = SimpleDateFormat("dd/MM/yyyy").format(Date()),
+            date = "20/01/2022",
             status = Status.IN_PROGRESS
         ),
         Task(

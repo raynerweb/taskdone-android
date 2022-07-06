@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.RadioGroup
 import androidx.appcompat.widget.SearchView
+import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -14,10 +15,12 @@ import br.com.raynerweb.ipl.taskdone.BuildConfig
 import br.com.raynerweb.ipl.taskdone.R
 import br.com.raynerweb.ipl.taskdone.databinding.FragmentTaskListBinding
 import br.com.raynerweb.ipl.taskdone.databinding.ViewStatusFilterBinding
+import br.com.raynerweb.ipl.taskdone.ext.toDate
 import br.com.raynerweb.ipl.taskdone.ui.adapter.TaskAdapter
 import br.com.raynerweb.ipl.taskdone.ui.model.Status
 import br.com.raynerweb.ipl.taskdone.ui.viewmodel.TaskListViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -90,6 +93,12 @@ class TaskListFragment : Fragment() {
         if (item.itemId == R.id.action_filter_by_status) {
             viewModel.showStatusFilter()
         }
+        if (item.itemId == R.id.action_filter_by_date) {
+            viewModel.showDateFilter()
+        }
+        if (item.itemId == R.id.action_clear_filter_by_date) {
+            viewModel.setDateFilter(null, null)
+        }
         return super.onOptionsItemSelected(item)
     }
 
@@ -121,6 +130,27 @@ class TaskListFragment : Fragment() {
     }
 
     private fun subscribe() {
+        viewModel.dateFilterActive.observe(viewLifecycleOwner) {
+            filteringByDate = it
+        }
+        viewModel.toggleDateFilter.observe(viewLifecycleOwner) {
+            val datePicker = MaterialDatePicker.Builder.dateRangePicker()
+                .setTitleText(getString(R.string.select_date))
+                .setSelection(
+                    Pair(
+                        MaterialDatePicker.thisMonthInUtcMilliseconds(),
+                        MaterialDatePicker.todayInUtcMilliseconds()
+                    )
+                )
+                .build()
+
+            datePicker.addOnPositiveButtonClickListener { interval ->
+                viewModel.setDateFilter(interval.first.toDate(), interval.second.toDate())
+            }
+
+            datePicker.show(parentFragmentManager, TAG)
+        }
+
         viewModel.toggleStatusFilter.observe(viewLifecycleOwner) {
             statusFilterDialog.show()
         }
@@ -175,6 +205,10 @@ class TaskListFragment : Fragment() {
 
     fun addTask(view: View) {
         findNavController().navigate(R.id.action_taskListFragment_to_taskFormFragment)
+    }
+
+    companion object {
+        const val TAG = "TASK_LIST"
     }
 
 }

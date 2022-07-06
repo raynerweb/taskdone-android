@@ -3,6 +3,7 @@ package br.com.raynerweb.ipl.taskdone.ui.viewmodel
 import androidx.annotation.CallSuper
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import br.com.raynerweb.ipl.taskdone.ext.toDate
 import br.com.raynerweb.ipl.taskdone.mocks.Mocks
 import br.com.raynerweb.ipl.taskdone.mocks.Mocks.MOCK_FILTERS
 import br.com.raynerweb.ipl.taskdone.repository.TaskRepository
@@ -19,6 +20,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.InjectMocks
 import org.mockito.MockitoAnnotations
+import java.util.*
 
 class TaskListFiltersViewModelTest {
 
@@ -158,7 +160,11 @@ class TaskListFiltersViewModelTest {
             viewModel.findAll()
             viewModel.setDescriptionFilter(description)
 
-            verify(observer).onChanged(eq(Mocks.MOCK_TASKS.filter { task -> task.description.contains(description) }))
+            verify(observer).onChanged(eq(Mocks.MOCK_TASKS.filter { task ->
+                task.description.contains(
+                    description
+                )
+            }))
         }
 
     /**
@@ -183,7 +189,26 @@ class TaskListFiltersViewModelTest {
         }
 
     /**
-     * Scenario 7 - Filter by date
+     * Scenario 7 - Show date picket to filter by date
+     * Given I am in task list screen
+     * When I want to search for a task by date
+     * Then I must click on the “Filter by date” from menu
+     * And see the date picker component to select a date interval
+     */
+    @Test
+    fun `And see the date picker component to select a date interval`(): Unit =
+        runBlocking {
+            val observer = spy<Observer<Unit>>()
+            viewModel.toggleDateFilter.observeForever(observer)
+
+            viewModel.showDateFilter()
+
+            verify(observer).onChanged(null)
+        }
+
+
+    /**
+     * Scenario 8 - Filter by date
      * Given I am in task list screen
      * When I want to search for a task by date
      * Then I must click on the calendar button
@@ -192,11 +217,26 @@ class TaskListFiltersViewModelTest {
     @Test
     fun `Then I must click on the calendar button And choose the time period`(): Unit =
         runBlocking {
-            //TODO("And enter a description in the search bar")
+            whenever(userRepository.findAll()).thenReturn(listOf(MOCK_FILTERS))
+
+            val observer = spy<Observer<List<Task>>>()
+            viewModel.taskList.observeForever(observer)
+
+            viewModel.findAll()
+
+
+            val initial = "10/01/2022".toDate()
+            val final = "20/01/2022".toDate()
+            viewModel.setDateFilter(initial, final)
+
+            verify(observer).onChanged(eq(Mocks.MOCK_TASKS.filter { task ->
+                task.date.toDate().after(initial) && task.date.toDate().before(final)
+            }))
+
         }
 
     /**
-     * Scenario 8 - Clear Filter by Date
+     * Scenario 9 - Clear Filter by Date
      * Given I am in task list screen
      * When I want to clear the search by date
      * Then I should click in the broom button
@@ -204,6 +244,15 @@ class TaskListFiltersViewModelTest {
     @Test
     fun `Then I should click in the broom button`(): Unit =
         runBlocking {
-            //TODO("And enter a description in the search bar")
+            whenever(userRepository.findAll()).thenReturn(listOf(MOCK_FILTERS))
+
+            val observer = spy<Observer<List<Task>>>()
+            viewModel.taskList.observeForever(observer)
+
+            viewModel.findAll()
+
+            viewModel.setDateFilter(null, null)
+
+            verify(observer, times(2)).onChanged(eq(Mocks.MOCK_TASKS))
         }
 }
