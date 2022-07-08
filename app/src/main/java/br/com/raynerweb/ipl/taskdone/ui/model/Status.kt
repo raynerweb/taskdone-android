@@ -1,13 +1,13 @@
 package br.com.raynerweb.ipl.taskdone.ui.model
 
 enum class Status {
-    BACKLOG,
+    TODO,
     IN_PROGRESS,
-    COMPLETED;
+    DONE;
 
     companion object {
         fun getStatus(statusName: String): Status {
-            return values().find { status: Status -> status.name == statusName } ?: BACKLOG
+            return values().find { status: Status -> status.name == statusName } ?: TODO
         }
     }
 }
