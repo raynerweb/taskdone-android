@@ -18,7 +18,7 @@ object Mocks {
         taskId = "1",
         description = "Description",
         date = SimpleDateFormat("dd/MM/yyyy").format(Date()),
-        status = Status.BACKLOG
+        status = Status.TODO
     )
     val USER_ENTITY = UserEntity(
         userId = 1,
@@ -30,5 +30,86 @@ object Mocks {
     )
     val USER_EMPTY_TASK = UserTasks(
         user = USER, tasks = emptyList()
+    )
+
+    val MOCK_FILTERS by lazy {
+        UserTasks(
+            user = USER, tasks = MOCK_TASKS
+        )
+    }
+
+    val MOCK_TASKS = listOf(
+        Task(
+            taskId = "1",
+            description = "ar",
+            date = "10/01/2022",
+            status = Status.TODO
+        ),
+        Task(
+            taskId = "2",
+            description = "arara",
+            date = "15/01/2022",
+            status = Status.IN_PROGRESS
+        ),
+        Task(
+            taskId = "3",
+            description = "araras",
+            date = "20/01/2022",
+            status = Status.IN_PROGRESS
+        ),
+        Task(
+            taskId = "4",
+            description = "bar",
+            date = SimpleDateFormat("dd/MM/yyyy").format(Date()),
+            status = Status.TODO
+        ),
+        Task(
+            taskId = "5",
+            description = "bares",
+            date = SimpleDateFormat("dd/MM/yyyy").format(Date()),
+            status = Status.IN_PROGRESS
+        ),
+        Task(
+            taskId = "6",
+            description = "resma",
+            date = SimpleDateFormat("dd/MM/yyyy").format(Date()),
+            status = Status.IN_PROGRESS
+        ),
+        Task(
+            taskId = "7",
+            description = "ca",
+            date = SimpleDateFormat("dd/MM/yyyy").format(Date()),
+            status = Status.TODO
+        ),
+        Task(
+            taskId = "8",
+            description = "casa",
+            date = SimpleDateFormat("dd/MM/yyyy").format(Date()),
+            status = Status.IN_PROGRESS
+        ),
+        Task(
+            taskId = "9",
+            description = "casamento",
+            date = SimpleDateFormat("dd/MM/yyyy").format(Date()),
+            status = Status.DONE
+        ),
+        Task(
+            taskId = "10",
+            description = "asa",
+            date = SimpleDateFormat("dd/MM/yyyy").format(Date()),
+            status = Status.TODO
+        ),
+        Task(
+            taskId = "11",
+            description = "bazar",
+            date = SimpleDateFormat("dd/MM/yyyy").format(Date()),
+            status = Status.IN_PROGRESS
+        ),
+        Task(
+            taskId = "12",
+            description = "vazar",
+            date = SimpleDateFormat("dd/MM/yyyy").format(Date()),
+            status = Status.DONE
+        )
     )
 }

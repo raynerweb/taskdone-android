@@ -23,7 +23,7 @@ class TaskAdapter(
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        holder.bind(tasks[position], position)
+        holder.bind(tasks[position])
     }
 
     override fun getItemCount(): Int = tasks.size
@@ -31,10 +31,10 @@ class TaskAdapter(
     inner class TaskViewHolder(private val binding: ViewTasksBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(task: Task, position: Int) {
+        fun bind(task: Task) {
             binding.task = task
             binding.delete.setOnClickListener {
-                deleteListener.invoke(task, position)
+                deleteListener.invoke(task, layoutPosition)
             }
             binding.shared.setOnClickListener {
                 shareListener.invoke(task)
