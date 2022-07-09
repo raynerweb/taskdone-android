@@ -3,13 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
-    app:startDestination="@id/taskListFragment">
-
+    app:startDestination="@id/loginFragment">
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="br.com.raynerweb.ipl.taskdone.ui.fragment.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_taskListFragment"
+            app:destination="@id/taskListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/taskListFragment"
         android:name="br.com.raynerweb.ipl.taskdone.ui.fragment.TaskListFragment"
         android:label="fragment_task_list"
-        tools:layout="@layout/fragment_task_list" >
+        tools:layout="@layout/fragment_task_list">
         <action
             android:id="@+id/action_taskListFragment_to_taskFormFragment"
             app:destination="@id/taskFormFragment"
@@ -23,4 +31,5 @@
         android:name="br.com.raynerweb.ipl.taskdone.ui.fragment.TaskFormFragment"
         android:label="fragment_task_form"
         tools:layout="@layout/fragment_task_form" />
+
 </navigation>
