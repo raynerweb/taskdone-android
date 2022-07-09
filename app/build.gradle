@@ -93,6 +93,9 @@ dependencies {
     implementation 'androidx.room:room-ktx:2.4.2'
     kapt 'androidx.room:room-compiler:2.4.2'
 
+    /** MP Android Chart **/
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
     /** Input Mask **/
 //    implementation 'com.github.genaku:input-mask-android:4.2.2'
 //    implementation 'com.github.RedMadRobot:input-mask-android:6.1.0'

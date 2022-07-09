@@ -14,6 +14,7 @@
         <entry key="app/src/main/res/drawable/ic_baseline_share_24.xml" value="0.19" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.19" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.35625" />
+        <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.35625" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.18177083333333333" />
         <entry key="app/src/main/res/layout/fragment_task_form.xml" value="0.23684210526315788" />
         <entry key="app/src/main/res/layout/fragment_task_list.xml" value="0.35625" />
