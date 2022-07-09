@@ -6,9 +6,9 @@
     <string name="description">Description</string>
     <string name="date">Date</string>
     <string name="status">Status</string>
-    <string name="backlog">Backlog</string>
+    <string name="backlog">To Do</string>
     <string name="in_progress">In Progress</string>
-    <string name="completed">Completed</string>
+    <string name="completed">Done</string>
     <string name="save">Save</string>
     <string name="share">Share</string>
     <string name="delete">Delete</string>
