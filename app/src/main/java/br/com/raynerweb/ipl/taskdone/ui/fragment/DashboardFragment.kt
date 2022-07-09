@@ -9,9 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import br.com.raynerweb.ipl.taskdone.R
 import br.com.raynerweb.ipl.taskdone.databinding.FragmentDashboardBinding
+import br.com.raynerweb.ipl.taskdone.ui.viewmodel.DashboardViewModel
+import br.com.raynerweb.ipl.taskdone.ui.viewmodel.TaskFormViewModel
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.Entry
@@ -29,6 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class DashboardFragment : Fragment() {
 
     private lateinit var binding: FragmentDashboardBinding
+    private val viewModel: DashboardViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +41,7 @@ class DashboardFragment : Fragment() {
         binding = FragmentDashboardBinding.inflate(inflater, container, false)
         binding.fragment = this
         binding.lifecycleOwner = this
+        binding.viewModel = viewModel
         return binding.root
     }
 
@@ -94,7 +99,7 @@ class DashboardFragment : Fragment() {
         binding.chart.isRotationEnabled = true
         binding.chart.isHighlightPerTapEnabled = true
         binding.chart.animateY(1400, Easing.EaseInOutQuad)
-        binding.chart.setNoDataText("nenhum dado para apresentar")
+        binding.chart.setNoDataText(getString(R.string.no_data_to_be_displayed))
 
         val l = binding.chart.legend
         l.verticalAlignment = Legend.LegendVerticalAlignment.TOP

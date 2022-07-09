@@ -7,6 +7,10 @@
         <variable
             name="fragment"
             type="br.com.raynerweb.ipl.taskdone.ui.fragment.DashboardFragment" />
+
+        <variable
+            name="viewModel"
+            type="br.com.raynerweb.ipl.taskdone.ui.viewmodel.DashboardViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
