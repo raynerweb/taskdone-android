@@ -28,7 +28,7 @@ class LoginFragment : Fragment() {
 
     private val gso: GoogleSignInOptions by lazy {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("")
+            .requestIdToken("853153103473-sq4gqrds0j8astbc9veh6t14eru04a49.apps.googleusercontent.com")
 
             .requestEmail()
             .requestProfile()
@@ -77,6 +77,10 @@ class LoginFragment : Fragment() {
 //                }
 //            }
         }
+
+    fun login(view: View) {
+
+    }
 
     fun loginGoogle(view: View) {
 //        val acct = GoogleSignIn.getLastSignedInAccount(requireActivity())

@@ -106,8 +106,8 @@ class DashboardFragment : Fragment() {
         }
 
         viewModel.showLogin.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), "Will be implemented", Toast.LENGTH_SHORT).show()
-//                findNavController().navigate(R.id.action_dashboardFragment_to_loginFragment)
+//            Toast.makeText(requireContext(), "Will be implemented", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.action_dashboardFragment_to_loginFragment)
         }
     }
 
