@@ -2,11 +2,7 @@ package br.com.raynerweb.ipl.taskdone.ui.fragment
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import android.util.TypedValue
 import android.view.*
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -17,7 +13,6 @@ import br.com.raynerweb.ipl.taskdone.R
 import br.com.raynerweb.ipl.taskdone.databinding.FragmentDashboardBinding
 import br.com.raynerweb.ipl.taskdone.ui.model.Status
 import br.com.raynerweb.ipl.taskdone.ui.viewmodel.DashboardViewModel
-import br.com.raynerweb.ipl.taskdone.ui.viewmodel.TaskFormViewModel
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.Entry
@@ -100,13 +95,11 @@ class DashboardFragment : Fragment() {
             if (it) {
                 findNavController().navigate(R.id.action_dashboardFragment_to_taskListFragment)
             } else {
-                Toast.makeText(requireContext(), "Will be implemented", Toast.LENGTH_SHORT).show()
-//                findNavController().navigate(R.id.action_dashboardFragment_to_loginFragment)
+                findNavController().navigate(R.id.action_dashboardFragment_to_loginFragment)
             }
         }
 
         viewModel.showLogin.observe(viewLifecycleOwner) {
-//            Toast.makeText(requireContext(), "Will be implemented", Toast.LENGTH_SHORT).show()
                 findNavController().navigate(R.id.action_dashboardFragment_to_loginFragment)
         }
     }
@@ -153,7 +146,6 @@ class DashboardFragment : Fragment() {
         binding.chart.isRotationEnabled = true
         binding.chart.isHighlightPerTapEnabled = true
         binding.chart.animateY(1400, Easing.EaseInOutQuad)
-//        binding.chart.setNoDataText(getString(R.string.no_data_to_be_displayed))
 
         val l = binding.chart.legend
         l.verticalAlignment = Legend.LegendVerticalAlignment.TOP
