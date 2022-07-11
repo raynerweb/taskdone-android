@@ -1,10 +1,12 @@
 package br.com.raynerweb.ipl.taskdone.repository.impl
 
+import br.com.raynerweb.ipl.taskdone.di.SharedPreferencesModule
 import br.com.raynerweb.ipl.taskdone.ext.toUser
 import br.com.raynerweb.ipl.taskdone.ext.toUserEntity
 import br.com.raynerweb.ipl.taskdone.ext.toUserTask
 import br.com.raynerweb.ipl.taskdone.repository.UserRepository
 import br.com.raynerweb.ipl.taskdone.repository.local.dao.UserDao
+import br.com.raynerweb.ipl.taskdone.repository.preference.LoginPreference
 import br.com.raynerweb.ipl.taskdone.ui.model.User
 import br.com.raynerweb.ipl.taskdone.ui.model.UserTasks
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +17,14 @@ import javax.inject.Singleton
 @Singleton
 class UserRepositoryImpl @Inject constructor(
     private val userDao: UserDao,
+    private val loginPreferences: LoginPreference
 ) : UserRepository {
+
+    override fun isLogged() = loginPreferences.isLogged
+
+    override fun setLogged(logged: Boolean) {
+        loginPreferences.isLogged = logged
+    }
 
     override suspend fun save(user: User) =
         withContext(context = Dispatchers.IO) {

@@ -6,10 +6,12 @@ import androidx.lifecycle.Observer
 import br.com.raynerweb.ipl.taskdone.mocks.Mocks.TASK
 import br.com.raynerweb.ipl.taskdone.mocks.Mocks.USER
 import br.com.raynerweb.ipl.taskdone.mocks.Mocks.USER_EMPTY_TASK
+import br.com.raynerweb.ipl.taskdone.mocks.Mocks.USER_ONE_TASK
 import br.com.raynerweb.ipl.taskdone.mocks.Mocks.USER_TASK
 import br.com.raynerweb.ipl.taskdone.repository.TaskRepository
 import br.com.raynerweb.ipl.taskdone.repository.UserRepository
 import br.com.raynerweb.ipl.taskdone.test.CoroutineTestRule
+import br.com.raynerweb.ipl.taskdone.ui.model.Status
 import br.com.raynerweb.ipl.taskdone.ui.model.Task
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -55,11 +57,11 @@ class TaskListViewModelTest {
     fun `Then the user needs to see a message You dont have a task here`(): Unit =
         runBlocking {
             whenever(userRepository.findAll()).thenReturn(listOf(USER_EMPTY_TASK))
-            val observer = spy<Observer<Unit>>()
-            viewModel.emptyTaskList.observeForever(observer)
+            val observer = spy<Observer<List<Task>>>()
+            viewModel.taskList.observeForever(observer)
 
             viewModel.findAll()
-            verify(observer).onChanged(null)
+            verify(observer).onChanged(USER_EMPTY_TASK.tasks)
         }
 
     /**
@@ -72,11 +74,11 @@ class TaskListViewModelTest {
     fun `Scenario 2 - Task List empty user - Then the user needs to see a message You dont have a task here`(): Unit =
         runBlocking {
             whenever(userRepository.findAll()).thenReturn(emptyList())
-            val observer = spy<Observer<Unit>>()
-            viewModel.emptyTaskList.observeForever(observer)
+            val observer = spy<Observer<List<Task>>>()
+            viewModel.taskList.observeForever(observer)
 
             viewModel.findAll()
-            verify(observer).onChanged(null)
+            verify(observer).onChanged(USER_EMPTY_TASK.tasks)
         }
 
     /**
@@ -126,12 +128,13 @@ class TaskListViewModelTest {
     @Test
     fun `Then the task is deleted and empty list need to be shown`(): Unit =
         runBlocking {
-            val emptyListObsever = spy<Observer<Unit>>()
-            viewModel.emptyTaskList.observeForever(emptyListObsever)
+            val deleteObserver = spy<Observer<Pair<Task, Int>>>()
+            viewModel.taskDeleted.observeForever(deleteObserver)
 
-            viewModel.checkEmptyList(emptyList())
+            viewModel.deleteTask(TASK, 1)
 
-            verify(emptyListObsever).onChanged(null)
+            verify(deleteObserver).onChanged(eq(Pair(TASK, 1)))
+
         }
 
     /**
@@ -143,12 +146,12 @@ class TaskListViewModelTest {
     @Test
     fun `Then the task is deleted and empty list cannot be called`(): Unit =
         runBlocking {
-            val emptyListObsever = spy<Observer<Unit>>()
-            viewModel.emptyTaskList.observeForever(emptyListObsever)
+            val deleteObserver = spy<Observer<Pair<Task, Int>>>()
+            viewModel.taskDeleted.observeForever(deleteObserver)
 
-            viewModel.checkEmptyList(listOf(TASK))
+            viewModel.deleteTask(TASK, 1)
 
-            verifyZeroInteractions(emptyListObsever)
+            verify(deleteObserver).onChanged(eq(Pair(TASK, 1)))
         }
 
 

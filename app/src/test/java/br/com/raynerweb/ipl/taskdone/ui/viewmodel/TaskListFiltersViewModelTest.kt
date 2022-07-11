@@ -52,7 +52,6 @@ class TaskListFiltersViewModelTest {
      * When I click on the funnel
      * Then I should see all Status option
      */
-    //TODO TEST SCENARIO
     @Test
     fun `Then I should see all Status option`(): Unit =
         runBlocking {
