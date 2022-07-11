@@ -4,12 +4,14 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import br.com.raynerweb.ipl.taskdone.R
 import br.com.raynerweb.ipl.taskdone.databinding.FragmentDashboardBinding
@@ -55,6 +57,31 @@ class DashboardFragment : Fragment() {
         viewModel.getChartEntries()
     }
 
+    private fun setupMenu() {
+        val menuHost: MenuHost = requireActivity()
+
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_dashboard, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.login -> {
+                        viewModel.showLoginScreen()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun setupViews() {
+        setupMenu()
+        setupChart()
+    }
+
     private fun subscribe() {
         viewModel.chartEntries.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
@@ -73,8 +100,14 @@ class DashboardFragment : Fragment() {
             if (it) {
                 findNavController().navigate(R.id.action_dashboardFragment_to_taskListFragment)
             } else {
-                findNavController().navigate(R.id.action_dashboardFragment_to_loginFragment)
+                Toast.makeText(requireContext(), "Will be implemented", Toast.LENGTH_SHORT).show()
+//                findNavController().navigate(R.id.action_dashboardFragment_to_loginFragment)
             }
+        }
+
+        viewModel.showLogin.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), "Will be implemented", Toast.LENGTH_SHORT).show()
+//                findNavController().navigate(R.id.action_dashboardFragment_to_loginFragment)
         }
     }
 
@@ -102,10 +135,6 @@ class DashboardFragment : Fragment() {
         data.setValueTextColor(Color.WHITE)
 
         binding.chart.data = data
-    }
-
-    private fun setupViews() {
-        setupChart()
     }
 
     private fun setupChart() {
