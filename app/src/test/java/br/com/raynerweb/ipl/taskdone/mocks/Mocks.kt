@@ -32,6 +32,17 @@ object Mocks {
         user = USER, tasks = emptyList()
     )
 
+    val USER_ONE_TASK = UserTasks(
+        user = USER, tasks = listOf(
+            Task(
+                taskId = "1",
+                description = "ar",
+                date = "10/01/2022",
+                status = Status.TODO
+            )
+        )
+    )
+
     val MOCK_FILTERS by lazy {
         UserTasks(
             user = USER, tasks = MOCK_TASKS

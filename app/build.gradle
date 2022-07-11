@@ -13,8 +13,8 @@ android {
         applicationId "br.com.raynerweb.ipl.taskdone"
         minSdk 23
         targetSdk 32
-        versionCode 3
-        versionName "0.0.2"
+        versionCode 4
+        versionName "0.0.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -93,6 +93,9 @@ dependencies {
     implementation 'androidx.room:room-ktx:2.4.2'
     kapt 'androidx.room:room-compiler:2.4.2'
 
+    /** MP Android Chart **/
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
     /** Input Mask **/
 //    implementation 'com.github.genaku:input-mask-android:4.2.2'
 //    implementation 'com.github.RedMadRobot:input-mask-android:6.1.0'
@@ -108,6 +111,11 @@ dependencies {
     // Declare the dependency for the Realtime Database library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-database-ktx'
+    // Declare the dependency for the Firebase Authentication library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    // Also declare the dependency for the Google Play services library and specify its version
+    implementation 'com.google.android.gms:play-services-auth:20.2.0'
 
 
     /** Tests **/

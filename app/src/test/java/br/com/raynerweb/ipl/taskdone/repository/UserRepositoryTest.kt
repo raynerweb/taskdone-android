@@ -4,6 +4,7 @@ import br.com.raynerweb.ipl.taskdone.mocks.Mocks.USER
 import br.com.raynerweb.ipl.taskdone.mocks.Mocks.USER_ENTITY
 import br.com.raynerweb.ipl.taskdone.repository.impl.UserRepositoryImpl
 import br.com.raynerweb.ipl.taskdone.repository.local.dao.UserDao
+import br.com.raynerweb.ipl.taskdone.repository.preference.LoginPreference
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -16,7 +17,8 @@ import org.junit.Test
 class UserRepositoryTest {
 
     private val userDao = mock<UserDao>()
-    private val repository = UserRepositoryImpl(userDao)
+    private val loginPreference = mock<LoginPreference>()
+    private val repository = UserRepositoryImpl(userDao, loginPreference)
 
     @Test
     fun `Should save user with success`() = runBlocking {

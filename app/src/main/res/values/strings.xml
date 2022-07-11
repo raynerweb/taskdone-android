@@ -1,14 +1,17 @@
 <resources>
     <string name="app_name">TaskDone</string>
+    <string name="no_data_to_be_displayed">No data to be displayed</string>
+    <string name="login">Login</string>
+    <string name="create_tasks">Criar tarefas</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_task">Add Task</string>
     <string name="no_tasks_message">You don’t have a task here</string>
     <string name="description">Description</string>
     <string name="date">Date</string>
     <string name="status">Status</string>
-    <string name="backlog">Backlog</string>
+    <string name="backlog">To Do</string>
     <string name="in_progress">In Progress</string>
-    <string name="completed">Completed</string>
+    <string name="completed">Done</string>
     <string name="save">Save</string>
     <string name="share">Share</string>
     <string name="delete">Delete</string>
