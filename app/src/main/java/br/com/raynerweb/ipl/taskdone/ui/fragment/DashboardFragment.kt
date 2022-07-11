@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import br.com.raynerweb.ipl.taskdone.R
 import br.com.raynerweb.ipl.taskdone.databinding.FragmentDashboardBinding
+import br.com.raynerweb.ipl.taskdone.ui.model.Status
 import br.com.raynerweb.ipl.taskdone.ui.viewmodel.DashboardViewModel
 import br.com.raynerweb.ipl.taskdone.ui.viewmodel.TaskFormViewModel
 import com.github.mikephil.charting.animation.Easing
@@ -48,26 +49,46 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        subscribe()
         setupViews()
+
+        viewModel.getChartEntries()
     }
 
-    private fun setupViews() {
-        setupChart()
+    private fun subscribe() {
+        viewModel.chartEntries.observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                binding.chart.visibility = View.GONE
+                binding.btnCreateTasks.visibility = View.VISIBLE
+                binding.tvEmptyData.visibility = View.VISIBLE
+            } else {
+                binding.chart.visibility = View.VISIBLE
+                binding.btnCreateTasks.visibility = View.GONE
+                binding.tvEmptyData.visibility = View.GONE
+                drawChart(it)
+            }
+        }
 
-        val entries = mutableListOf(
+        viewModel.isLogged.observe(viewLifecycleOwner) {
+            if (it) {
+                findNavController().navigate(R.id.action_dashboardFragment_to_taskListFragment)
+            } else {
+                findNavController().navigate(R.id.action_dashboardFragment_to_loginFragment)
+            }
+        }
+    }
+
+    fun createTask(view: View) {
+        viewModel.createTask()
+    }
+
+    private fun drawChart(data: List<Pair<Float, Status>>) {
+        val entries = data.map { pair ->
             PieEntry(
-                51.toFloat(),
-                "Bolsonaro",
-            ),
-            PieEntry(
-                30.toFloat(),
-                "Lula",
-            ),
-            PieEntry(
-                19.toFloat(),
-                "Moro",
+                pair.first,
+                pair.second.name
             )
-        )
+        }
         val dataSet = PieDataSet(entries, "")
 
         // Set color of slice
@@ -81,6 +102,10 @@ class DashboardFragment : Fragment() {
         data.setValueTextColor(Color.WHITE)
 
         binding.chart.data = data
+    }
+
+    private fun setupViews() {
+        setupChart()
     }
 
     private fun setupChart() {
@@ -99,7 +124,7 @@ class DashboardFragment : Fragment() {
         binding.chart.isRotationEnabled = true
         binding.chart.isHighlightPerTapEnabled = true
         binding.chart.animateY(1400, Easing.EaseInOutQuad)
-        binding.chart.setNoDataText(getString(R.string.no_data_to_be_displayed))
+//        binding.chart.setNoDataText(getString(R.string.no_data_to_be_displayed))
 
         val l = binding.chart.legend
         l.verticalAlignment = Legend.LegendVerticalAlignment.TOP
