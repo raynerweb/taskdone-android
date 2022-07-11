@@ -18,6 +18,12 @@ class DashboardViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
+    private val _showLogin = SingleLiveEvent<Unit>()
+    val showLogin: LiveData<Unit> get() = _showLogin
+
+    private val _isLogged = SingleLiveEvent<Boolean>()
+    val isLogged: LiveData<Boolean> get() = _isLogged
+
     private val _chartEntries = SingleLiveEvent<List<Pair<Float, Status>>>()
     val chartEntries: LiveData<List<Pair<Float, Status>>> get() = _chartEntries
 
@@ -30,6 +36,14 @@ class DashboardViewModel @Inject constructor(
             (tasks.filter { task -> task.status == status }.size.toFloat()
                 .div(tasks.size.toFloat()) * 100).roundToInt().toFloat()
         }
+    }
+
+    fun showLoginScreen() {
+        _showLogin.call()
+    }
+
+    fun createTask() {
+        _isLogged.postValue(userRepository.isLogged())
     }
 
     fun getChartEntries() = viewModelScope.launch {

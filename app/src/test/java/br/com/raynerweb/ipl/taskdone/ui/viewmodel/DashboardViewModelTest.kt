@@ -46,14 +46,6 @@ class DashboardViewModelTest {
 
 
     /**
-     * Scenario 1 - Visualizar o Dashboard
-     * Given I wanted to access the app
-     * When I click on the TaskDone icon
-     * Then I should see the dashboard screen
-     * E uma opção de menu de Login
-     */
-
-    /**
      * Scenario 2 - Visualizar o Dashboard com dados
      * Given that I am on the dashboard screen
      * Quando eu tiver tarefas salvas no aplicativo
@@ -99,7 +91,7 @@ class DashboardViewModelTest {
      * E o botão "Criar tarefas"
      */
     @Test
-    fun `Entao eu devo ver a mensagem No data to be displayed`(): Unit =
+    fun `Então eu devo ver a mensagem "No data to be displayed"`(): Unit =
         runBlocking {
             whenever(userRepository.findAll()).thenReturn(listOf(Mocks.USER_EMPTY_TASK))
 
@@ -117,6 +109,17 @@ class DashboardViewModelTest {
      * E não estiver logado na aplicação
      * Então eu devo ser direcionado para o ecrã de Login
      */
+    @Test
+    fun `Então eu devo ser direcionado para o ecrã de Login`(): Unit =
+        runBlocking {
+            whenever(userRepository.isLogged()).thenReturn(false)
+
+            val observer = spy<Observer<Boolean>>()
+            viewModel.isLogged.observeForever(observer)
+
+            viewModel.createTask()
+            verify(observer).onChanged(eq(false))
+        }
 
     /**
      * Scenario 5 - Ser direcionado ao login ao clicar na opção de menu criar tarefas
@@ -124,6 +127,15 @@ class DashboardViewModelTest {
      * Quando eu clicar na opção de menu de Login
      * Então eu devo ser direcionado para o ecrã de Login
      */
+    @Test
+    fun `Ser direcionado ao login ao clicar na opção de menu criar tarefas`(): Unit =
+        runBlocking {
+            val observer = spy<Observer<Unit>>()
+            viewModel.showLogin.observeForever(observer)
+
+            viewModel.showLoginScreen()
+            verify(observer).onChanged(eq(null))
+        }
 
     /**
      * Scenario 6 - Ser direcionado para visualizao das tarefas criadas
@@ -132,4 +144,15 @@ class DashboardViewModelTest {
      * E estiver logado na aplicação
      * Então eu devo ser direcionado para o ecrã Task List
      */
+    @Test
+    fun `Então eu devo ser direcionado para o ecrã Task List`(): Unit =
+        runBlocking {
+            whenever(userRepository.isLogged()).thenReturn(true)
+
+            val observer = spy<Observer<Boolean>>()
+            viewModel.isLogged.observeForever(observer)
+
+            viewModel.createTask()
+            verify(observer).onChanged(eq(true))
+        }
 }
