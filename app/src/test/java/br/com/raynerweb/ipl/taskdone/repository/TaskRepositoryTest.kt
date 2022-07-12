@@ -1,7 +1,7 @@
 package br.com.raynerweb.ipl.taskdone.repository
 
 import br.com.raynerweb.ipl.taskdone.mocks.Mocks.TASK
-import br.com.raynerweb.ipl.taskdone.mocks.Mocks.USER
+import br.com.raynerweb.ipl.taskdone.mocks.Mocks.LOCAL_USER
 import br.com.raynerweb.ipl.taskdone.mocks.Mocks.USER_ENTITY
 import br.com.raynerweb.ipl.taskdone.repository.impl.TaskRepositoryImpl
 import br.com.raynerweb.ipl.taskdone.repository.local.dao.TaskDao
@@ -26,7 +26,7 @@ class TaskRepositoryTest {
     @Test
     fun `Should save task with success`() = runBlocking {
         whenever(userDao.findByEmail(any())).thenReturn(USER_ENTITY)
-        repository.save(USER, "Description", Date(), Status.TODO)
+        repository.save(LOCAL_USER, "Description", Date(), Status.TODO)
 
         verify(taskDao).save(any())
         verify(userTaskDao).save(any())

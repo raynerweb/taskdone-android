@@ -1,6 +1,5 @@
 package br.com.raynerweb.ipl.taskdone.repository.impl
 
-import br.com.raynerweb.ipl.taskdone.di.SharedPreferencesModule
 import br.com.raynerweb.ipl.taskdone.ext.toUser
 import br.com.raynerweb.ipl.taskdone.ext.toUserEntity
 import br.com.raynerweb.ipl.taskdone.ext.toUserTask
@@ -28,7 +27,13 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun save(user: User) =
         withContext(context = Dispatchers.IO) {
-            userDao.save(user.toUserEntity())
+            userDao.findLocalUser()?.let { currentLocalUser ->
+                currentLocalUser.name = user.name
+                currentLocalUser.email = user.email
+                userDao.update(currentLocalUser)
+            } ?: run {
+                userDao.save(user.toUserEntity())
+            }
         }
 
     override suspend fun findByEmail(email: String): User? {
@@ -45,6 +50,12 @@ class UserRepositoryImpl @Inject constructor(
         return withContext(context = Dispatchers.IO) {
             return@withContext userDao.findGroupedByUser()
                 .map { userWithTasks -> userWithTasks.toUserTask() }
+        }
+    }
+
+    override suspend fun findLocalUser(): User? {
+        return withContext(context = Dispatchers.IO) {
+            return@withContext userDao.findLocalUser()?.toUser()
         }
     }
 

@@ -8,7 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import br.com.raynerweb.ipl.taskdone.R
 import br.com.raynerweb.ipl.taskdone.databinding.FragmentLoginBinding
+import br.com.raynerweb.ipl.taskdone.ui.model.ValidationType
+import br.com.raynerweb.ipl.taskdone.ui.viewmodel.LoginViewModel
+import br.com.raynerweb.ipl.taskdone.ui.viewmodel.TaskFormViewModel
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -21,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
+    private val viewModel: LoginViewModel by viewModels()
 
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var oneTapClient: SignInClient
@@ -42,14 +48,39 @@ class LoginFragment : Fragment() {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
         binding.fragment = this
         binding.lifecycleOwner = this
+        binding.viewModel = viewModel
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+        subscribe()
+        setupViews()
 
+    }
+
+    private fun subscribe() {
+        viewModel.showNameValidation.observe(viewLifecycleOwner) {
+            when (it) {
+                ValidationType.REQUIRED -> {
+                    binding.tilEmail.error = getString(R.string.required_field)
+                }
+                else -> binding.tilEmail.error = null
+            }
+        }
+        viewModel.showNameValidation.observe(viewLifecycleOwner) {
+            when (it) {
+                ValidationType.REQUIRED -> {
+                    binding.tilName.error = getString(R.string.required_field)
+                }
+                else -> binding.tilName.error = null
+            }
+        }
+    }
+
+    private fun setupViews() {
+        mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
     }
 
     var resultLauncher =
@@ -79,7 +110,7 @@ class LoginFragment : Fragment() {
         }
 
     fun login(view: View) {
-
+        viewModel.login()
     }
 
     fun loginGoogle(view: View) {

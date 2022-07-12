@@ -15,4 +15,6 @@ interface UserRepository {
 
     suspend fun findAll(): List<UserTasks>
 
+    suspend fun findLocalUser(): User?
+
 }

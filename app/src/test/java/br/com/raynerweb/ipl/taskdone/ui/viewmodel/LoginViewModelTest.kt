@@ -6,6 +6,8 @@ import androidx.lifecycle.Observer
 import br.com.raynerweb.ipl.taskdone.repository.TaskRepository
 import br.com.raynerweb.ipl.taskdone.repository.UserRepository
 import br.com.raynerweb.ipl.taskdone.test.CoroutineTestRule
+import br.com.raynerweb.ipl.taskdone.ui.model.Status
+import br.com.raynerweb.ipl.taskdone.ui.model.ValidationType
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.spy
@@ -25,7 +27,7 @@ class LoginViewModelTest {
     private val userRepository = mock<UserRepository>()
 
     @InjectMocks
-    lateinit var viewModel: DashboardViewModel
+    lateinit var viewModel: LoginViewModel
 
     @ExperimentalCoroutinesApi
     @get:Rule
@@ -60,14 +62,48 @@ class LoginViewModelTest {
         runBlocking {
         }
 
-//    Scenario 3 - Login para trabalhar sozinho - Validação dos campos
-//    Dado que eu tenha clicado em trabalhar sozinho
-//    Quando eu nao preencher os campos de email e nome e clicar em salvar
-//    Entao eu devo ver a seguinte mensagem para ambos os campos: "Required field" message
 
-//    Scenario 4 - Login para trabalhar sozinho - realizar login
-//    Dado que eu tenha clicado em trabalhar sozinho
-//    Quando eu preencher corretamente os campos de email e nome
-//    When I click Save
-//    Then eu devo ser direcionado para ecrã Dashboard
+    /**
+     * Scenario 3 - Login para trabalhar sozinho - Campos obrigatórios
+     * Dado que eu queira trabalhar sozinho
+     * Quando eu nao preencher os campos de email e nome
+     * E clicar em salvar
+     * Entao eu devo ver a seguinte mensagem para ambos os campos: "Required field"
+     */
+    @Test
+    fun `Scenario 3 - Login para trabalhar sozinho - Campos obrigatórios`(): Unit =
+        runBlocking {
+
+            val emailValidationObserver = spy<Observer<ValidationType>>()
+            viewModel.showEmailValidation.observeForever(emailValidationObserver)
+
+            val nameValidationObserver = spy<Observer<ValidationType>>()
+            viewModel.showNameValidation.observeForever(nameValidationObserver)
+
+            viewModel.login()
+
+            verify(emailValidationObserver).onChanged(eq(ValidationType.REQUIRED))
+            verify(nameValidationObserver).onChanged(eq(ValidationType.REQUIRED))
+        }
+
+    /**
+     * Scenario 4 - Login para trabalhar sozinho - login com sucesso
+     * Dado que eu queira trabalhar sozinho
+     * Quando eu preencher corretamente os campos de email e nome
+     * E clicar em Salvar
+     * Entao eu devo ser direcionado para ecra Dashboard
+     */
+    @Test
+    fun `Scenario 4 - Login para trabalhar sozinho - login com sucesso`(): Unit =
+        runBlocking {
+            val loginSuccessObserver = spy<Observer<Unit>>()
+            viewModel.loginSuccess.observeForever(loginSuccessObserver)
+
+            viewModel.email.postValue("email@email.com")
+            viewModel.name.postValue("name")
+
+            viewModel.login()
+
+            verify(loginSuccessObserver).onChanged(null)
+        }
 }

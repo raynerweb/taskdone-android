@@ -88,8 +88,9 @@ class TaskFormViewModel @Inject constructor(
         _status.postValue(status)
     }
 
+    //TODO Remover
     companion object {
-        private val DEFAULT_USER = User(name = "rayner", email = "email@email.com")
+        private val DEFAULT_USER = User(name = "rayner", email = "email@email.com", isLocal = true)
     }
 
     init {
