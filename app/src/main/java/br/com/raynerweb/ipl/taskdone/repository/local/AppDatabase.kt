@@ -14,7 +14,7 @@ import br.com.raynerweb.ipl.taskdone.repository.local.entity.UserTaskEntity
 
 @Database(
     entities = [UserEntity::class, TaskEntity::class, UserTaskEntity::class],
-    version = 1
+    version = 2
 )
 @TypeConverters(DateConverter::class, BooleanConverter::class)
 abstract class AppDatabase : RoomDatabase() {
