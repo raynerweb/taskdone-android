@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import br.com.raynerweb.ipl.taskdone.R
 import br.com.raynerweb.ipl.taskdone.databinding.FragmentLoginBinding
 import br.com.raynerweb.ipl.taskdone.ui.model.ValidationType
@@ -76,6 +77,9 @@ class LoginFragment : Fragment() {
                 }
                 else -> binding.tilName.error = null
             }
+        }
+        viewModel.loginSuccess.observe(viewLifecycleOwner) {
+            findNavController().navigateUp()
         }
     }
 

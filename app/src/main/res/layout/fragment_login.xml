@@ -101,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:inputType="textCapWords"
-                android:text="@={viewModel.email}" />
+                android:text="@={viewModel.name}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

@@ -159,11 +159,11 @@ class DashboardFragment : Fragment() {
         binding.chart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
 
             override fun onValueSelected(e: Entry?, h: Highlight?) {
-                findNavController().navigate(R.id.action_dashboardFragment_to_taskListFragment)
+                viewModel.createTask()
             }
 
             override fun onNothingSelected() {
-                findNavController().navigate(R.id.action_dashboardFragment_to_taskListFragment)
+                viewModel.createTask()
             }
 
         })

@@ -67,6 +67,8 @@ class LoginViewModel @Inject constructor(
             )
         )
 
+        userRepository.setLogged(true)
+
         _loginSuccess.call()
 
     }
