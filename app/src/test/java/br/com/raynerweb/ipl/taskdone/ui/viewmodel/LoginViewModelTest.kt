@@ -45,33 +45,14 @@ class LoginViewModelTest {
         MockitoAnnotations.initMocks(this)
     }
 
-//    Scenario 1 - Login para trabalhar com um time
-//    Given that I am in the login screen
-//    When I click on Work in Team
-//    Then I must select my Google credentials to stay logged in and work in team
-//    And I should be directed to the Dashboard screen
-
-    //    Scenario 2 - Login para trabalhar sozinho - apresentar campos
-//    Given that I am at the login screen
-//    When I click on Work alone
-//    Then I should see the email field
-//    And see the name field
-//    And the save button to save
-    @Test
-    fun `Scenario 2 - Login para trabalhar sozinho - apresentar campos`(): Unit =
-        runBlocking {
-        }
-
-
     /**
-     * Scenario 3 - Login para trabalhar sozinho - Campos obrigatórios
-     * Dado que eu queira trabalhar sozinho
-     * Quando eu nao preencher os campos de email e nome
-     * E clicar em salvar
-     * Entao eu devo ver a seguinte mensagem para ambos os campos: "Required field"
+     * Scenario 2 - Login Validation by Email and Name
+     * Given that I am in the login screen
+     * When I don't fill the email and name fields and click save
+     * Then I should see the following message for both fields: "Required fields".
      */
     @Test
-    fun `Scenario 3 - Login para trabalhar sozinho - Campos obrigatórios`(): Unit =
+    fun `Then I should see the following message for both fields Required fields`(): Unit =
         runBlocking {
 
             val emailValidationObserver = spy<Observer<ValidationType>>()
@@ -87,14 +68,13 @@ class LoginViewModelTest {
         }
 
     /**
-     * Scenario 4 - Login para trabalhar sozinho - login com sucesso
-     * Dado que eu queira trabalhar sozinho
-     * Quando eu preencher corretamente os campos de email e nome
-     * E clicar em Salvar
-     * Entao eu devo ser direcionado para ecra Dashboard
+     * Scenario 3 - Login by email and name
+     * Given that I am at the login screen
+     * When I fill in the correct email and name fields and click save
+     * Then I should be redirected to the Dashboard screen
      */
     @Test
-    fun `Scenario 4 - Login para trabalhar sozinho - login com sucesso`(): Unit =
+    fun `Then I should be redirected to the Dashboard screen`(): Unit =
         runBlocking {
             val loginSuccessObserver = spy<Observer<Unit>>()
             viewModel.loginSuccess.observeForever(loginSuccessObserver)
@@ -106,4 +86,28 @@ class LoginViewModelTest {
 
             verify(loginSuccessObserver).onChanged(null)
         }
+
+    /**
+     * Scenario 4 - Login with Google
+     * Given that I am at the login screen
+     * When I click on the Google Sing In button
+     * Then I should login with Google
+     * And I should be redirected to the Dashboard screen
+     */
+    @Test
+    fun `Then I should login with Google`(): Unit =
+        runBlocking {
+            runBlocking {
+                val loginSuccessObserver = spy<Observer<Unit>>()
+                viewModel.loginSuccess.observeForever(loginSuccessObserver)
+
+                viewModel.email.postValue("email@email.com")
+                viewModel.name.postValue("name")
+
+                viewModel.login()
+
+                verify(loginSuccessObserver).onChanged(null)
+            }
+        }
+
 }
