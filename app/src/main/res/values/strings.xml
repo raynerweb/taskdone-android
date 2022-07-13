@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">TaskDone</string>
-    <string name="no_data_to_be_displayed">No data to be displayed</string>
+    <string name="no_data_to_be_displayed">No data to display</string>
     <string name="login">Login</string>
-    <string name="create_tasks">Criar tarefas</string>
+    <string name="create_tasks">Create Tasks</string>
     <string name="work_in_team">Work in Team</string>
     <string name="add_task">Add Task</string>
     <string name="no_tasks_message">You don’t have a task here</string>
