@@ -2,7 +2,6 @@ package br.com.raynerweb.ipl.taskdone.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import br.com.raynerweb.ipl.taskdone.repository.preference.LoginPreference
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,14 +14,24 @@ import javax.inject.Qualifier
 object SharedPreferencesModule {
 
     private const val LOGIN_PREFERENCES = "LOGIN_PREFERENCES"
+    private const val TEAM_PREFERENCES = "TEAM_PREFERENCES"
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class LoginPreferences
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class TeamPreferences
+
     @Provides
     @LoginPreferences
-    fun provide(@ApplicationContext context: Context): SharedPreferences =
+    fun provideLoginPreferences(@ApplicationContext context: Context): SharedPreferences =
         context.getSharedPreferences(LOGIN_PREFERENCES, Context.MODE_PRIVATE)
+
+    @Provides
+    @TeamPreferences
+    fun provideTeamPreferences(@ApplicationContext context: Context): SharedPreferences =
+        context.getSharedPreferences(TEAM_PREFERENCES, Context.MODE_PRIVATE)
 
 }

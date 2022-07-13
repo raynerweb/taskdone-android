@@ -74,7 +74,6 @@ class TaskFormViewModel @Inject constructor(
         }
 
         taskRepository.save(
-            DEFAULT_USER,
             getDescriptionText(),
             getDateText().toDate(),
             status.value ?: Status.TODO
@@ -86,20 +85,6 @@ class TaskFormViewModel @Inject constructor(
 
     fun setStatus(status: Status) {
         _status.postValue(status)
-    }
-
-    //TODO Remover
-    companion object {
-        private val DEFAULT_USER = User(name = "rayner", email = "email@email.com", isLocal = true)
-    }
-
-    init {
-        viewModelScope.launch {
-            val savedUser = userRepository.findByEmail(DEFAULT_USER.email)
-            if (savedUser == null) {
-                userRepository.save(DEFAULT_USER)
-            }
-        }
     }
 
 }

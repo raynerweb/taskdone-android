@@ -53,6 +53,21 @@ class LoginViewModel @Inject constructor(
         return valid
     }
 
+    fun googleLogin(name: String, email: String, photo: String?) = viewModelScope.launch {
+        userRepository.save(
+            User(
+                name = name,
+                email = email,
+                photo = photo,
+                isLocal = true
+            )
+        )
+
+        userRepository.setLogged(true)
+        userRepository.setTeam(true)
+        _loginSuccess.call()
+    }
+
     fun login() = viewModelScope.launch {
 
         if (!isValid()) {
@@ -68,7 +83,7 @@ class LoginViewModel @Inject constructor(
         )
 
         userRepository.setLogged(true)
-
+        userRepository.setTeam(false)
         _loginSuccess.call()
 
     }

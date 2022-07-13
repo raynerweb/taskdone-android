@@ -5,6 +5,10 @@ import br.com.raynerweb.ipl.taskdone.ui.model.UserTasks
 
 interface UserRepository {
 
+    fun isTeam(): Boolean
+
+    fun setTeam(team: Boolean)
+
     fun isLogged(): Boolean
 
     fun setLogged(logged: Boolean)

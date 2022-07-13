@@ -5,19 +5,19 @@ import androidx.core.content.edit
 import br.com.raynerweb.ipl.taskdone.di.SharedPreferencesModule
 import javax.inject.Inject
 
-class LoginPreference @Inject constructor(
-    @SharedPreferencesModule.LoginPreferences
+class TeamPreference @Inject constructor(
+    @SharedPreferencesModule.TeamPreferences
     private val preferences: SharedPreferences,
 ) {
 
     companion object {
-        private const val LOGIN = "LOGIN"
+        private const val TEAM = "TEAM"
     }
 
     /**
-     * Is logged
+     * It is co working
      */
-    var isLogged: Boolean
-        get() = preferences.getBoolean(LOGIN, false)
-        set(value) = preferences.edit { putBoolean(LOGIN, value) }
+    var isTeam: Boolean
+        get() = preferences.getBoolean(TEAM, false)
+        set(value) = preferences.edit { putBoolean(TEAM, value) }
 }
