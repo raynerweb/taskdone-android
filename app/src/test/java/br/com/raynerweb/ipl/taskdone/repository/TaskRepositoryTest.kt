@@ -25,8 +25,8 @@ class TaskRepositoryTest {
 
     @Test
     fun `Should save task with success`() = runBlocking {
-        whenever(userDao.findByEmail(any())).thenReturn(USER_ENTITY)
-        repository.save(LOCAL_USER, "Description", Date(), Status.TODO)
+        whenever(userDao.findLocalUser()).thenReturn(USER_ENTITY)
+        repository.save("Description", Date(), Status.TODO)
 
         verify(taskDao).save(any())
         verify(userTaskDao).save(any())

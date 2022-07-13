@@ -5,6 +5,7 @@ import br.com.raynerweb.ipl.taskdone.mocks.Mocks.USER_ENTITY
 import br.com.raynerweb.ipl.taskdone.repository.impl.UserRepositoryImpl
 import br.com.raynerweb.ipl.taskdone.repository.local.dao.UserDao
 import br.com.raynerweb.ipl.taskdone.repository.preference.LoginPreference
+import br.com.raynerweb.ipl.taskdone.repository.preference.TeamPreference
 import br.com.raynerweb.ipl.taskdone.ui.model.User
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
@@ -18,7 +19,8 @@ class UserRepositoryTest {
 
     private val userDao = mock<UserDao>()
     private val loginPreference = mock<LoginPreference>()
-    private val repository = UserRepositoryImpl(userDao, loginPreference)
+    private val teamPreference = mock<TeamPreference>()
+    private val repository = UserRepositoryImpl(userDao, loginPreference, teamPreference)
 
     @Test
     fun `Should save user with success`() = runBlocking {
