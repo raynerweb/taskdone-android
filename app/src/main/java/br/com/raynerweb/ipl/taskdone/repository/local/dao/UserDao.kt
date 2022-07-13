@@ -1,11 +1,9 @@
 package br.com.raynerweb.ipl.taskdone.repository.local.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 import br.com.raynerweb.ipl.taskdone.repository.local.entity.UserEntity
 import br.com.raynerweb.ipl.taskdone.repository.local.entity.UserWithTasks
+import br.com.raynerweb.ipl.taskdone.ui.model.User
 
 @Dao
 interface UserDao {
@@ -21,6 +19,13 @@ interface UserDao {
     @Transaction
     @Query("SELECT * FROM users")
     fun findGroupedByUser(): List<UserWithTasks>
+
+    @Transaction
+    @Query("SELECT * FROM users WHERE users.isLocal == 1")
+    fun findLocalUser(): UserEntity?
+
+    @Update
+    fun update(userEntity: UserEntity)
 
     @Insert
     fun save(userEntity: UserEntity)

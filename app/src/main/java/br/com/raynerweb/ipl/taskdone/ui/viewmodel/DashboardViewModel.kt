@@ -43,8 +43,7 @@ class DashboardViewModel @Inject constructor(
     }
 
     fun createTask() {
-//        _isLogged.postValue(userRepository.isLogged())
-        _isLogged.postValue(true)
+        _isLogged.postValue(userRepository.isLogged())
     }
 
     fun getChartEntries() = viewModelScope.launch {

@@ -10,9 +10,10 @@ import java.util.*
 
 object Mocks {
 
-    val USER = User(
+    val LOCAL_USER = User(
         email = "raynerweb@gmail.com",
-        name = "Rayner"
+        name = "Rayner",
+        isLocal = true
     )
     val TASK = Task(
         taskId = "1",
@@ -24,16 +25,17 @@ object Mocks {
         userId = 1,
         email = "email@email.com",
         name = "Rayner",
+        isLocal = true
     )
     val USER_TASK = UserTasks(
-        user = USER, tasks = listOf(TASK)
+        user = LOCAL_USER, tasks = listOf(TASK)
     )
     val USER_EMPTY_TASK = UserTasks(
-        user = USER, tasks = emptyList()
+        user = LOCAL_USER, tasks = emptyList()
     )
 
     val USER_ONE_TASK = UserTasks(
-        user = USER, tasks = listOf(
+        user = LOCAL_USER, tasks = listOf(
             Task(
                 taskId = "1",
                 description = "ar",
@@ -45,7 +47,7 @@ object Mocks {
 
     val MOCK_FILTERS by lazy {
         UserTasks(
-            user = USER, tasks = MOCK_TASKS
+            user = LOCAL_USER, tasks = MOCK_TASKS
         )
     }
 

@@ -137,7 +137,7 @@ class TaskListFiltersViewModelTest {
             viewModel.findAll()
             viewModel.setStatusFilter(null)
 
-            verify(observer).onChanged(eq(Mocks.MOCK_TASKS))
+            verify(observer, times(2)).onChanged(eq(Mocks.MOCK_TASKS))
         }
 
     /**

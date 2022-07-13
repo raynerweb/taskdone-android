@@ -3,7 +3,7 @@
     <string name="no_data_to_be_displayed">No data to be displayed</string>
     <string name="login">Login</string>
     <string name="create_tasks">Criar tarefas</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="work_in_team">Work in Team</string>
     <string name="add_task">Add Task</string>
     <string name="no_tasks_message">You don’t have a task here</string>
     <string name="description">Description</string>
@@ -25,4 +25,9 @@
     <string name="choose_one">Choose one</string>
     <string name="status_filter">Status Filter</string>
     <string name="all">All</string>
+    <string name="or_work_alone">For work alone, fill the form</string>
+    <string name="email">E-mail</string>
+    <string name="name">Name</string>
+    <string name="for_work_with_team">For work with a team\nclick below</string>
+    <string name="logo">Logo</string>
 </resources>
