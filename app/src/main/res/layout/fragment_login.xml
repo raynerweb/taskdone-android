@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="32dp"
             android:gravity="center"
-            android:text="@string/for_work_with_team"
+            android:text="@string/for_login_with_google_click_below"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_logo" />
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="32dp"
             android:gravity="center"
-            android:text="@string/or_work_alone"
+            android:text="@string/or_signin_with_your_email_and_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sign_in_button" />

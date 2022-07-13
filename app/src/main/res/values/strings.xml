@@ -25,9 +25,9 @@
     <string name="choose_one">Choose one</string>
     <string name="status_filter">Status Filter</string>
     <string name="all">All</string>
-    <string name="or_work_alone">For work alone, fill the form</string>
+    <string name="or_signin_with_your_email_and_name">Or Sign in with your email and name</string>
     <string name="email">E-mail</string>
     <string name="name">Name</string>
-    <string name="for_work_with_team">For work with a team\nclick below</string>
+    <string name="for_login_with_google_click_below">For login with Google click on button below</string>
     <string name="logo">Logo</string>
 </resources>
