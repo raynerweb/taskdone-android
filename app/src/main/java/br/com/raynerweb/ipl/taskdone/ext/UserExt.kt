@@ -5,7 +5,10 @@ import br.com.raynerweb.ipl.taskdone.ui.model.User
 
 fun User.toUserEntity(): UserEntity = UserEntity(
     name = this.name,
-    email = this.email
+    email = this.email,
+    isLocal = this.isLocal,
+    photo = this.photo,
 )
 
-fun UserEntity.toUser() = User(name = this.name, email = this.email)
+fun UserEntity.toUser() =
+    User(name = this.name, email = this.email, isLocal = this.isLocal, photo = photo)

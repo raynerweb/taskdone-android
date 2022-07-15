@@ -34,13 +34,36 @@ class UserDaoTest {
     }
 
     @Test
-    fun shouldSaveAnUser() = runBlocking {
+    fun shouldSaveALocalUser() = runBlocking {
         val user = UserEntity(
             name = "Ráyner",
             email = "email@email.com",
+            isLocal = true
+        )
+        userDao.save(user)
+        Assert.assertTrue(userDao.findLocalUser()?.isLocal ?: false)
+    }
+
+    @Test
+    fun shouldSaveAExternalUser() = runBlocking {
+        val user = UserEntity(
+            name = "Ráyner",
+            email = "email@email.com",
+            isLocal = false
         )
         userDao.save(user)
         Assert.assertTrue(userDao.findAll().isNotEmpty())
+    }
+
+    @Test
+    fun shouldndFindAExternalUser() = runBlocking {
+        val user = UserEntity(
+            name = "Ráyner",
+            email = "email@email.com",
+            isLocal = false
+        )
+        userDao.save(user)
+        Assert.assertNull(userDao.findLocalUser())
     }
 
 }

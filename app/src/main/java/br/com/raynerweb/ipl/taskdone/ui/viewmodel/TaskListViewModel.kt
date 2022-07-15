@@ -107,6 +107,7 @@ class TaskListViewModel @Inject constructor(
             _taskList.postValue(emptyList())
             return@launch
         }
+        //TODO Replace by findLocalUser
         val tasks = userTasks[0].tasks
         _taskList.postValue(tasks)
     }

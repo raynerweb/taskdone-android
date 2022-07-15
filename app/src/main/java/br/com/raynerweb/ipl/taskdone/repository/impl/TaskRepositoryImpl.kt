@@ -23,7 +23,7 @@ class TaskRepositoryImpl @Inject constructor(
     private val userTaskDao: UserTaskDao
 ) : TaskRepository {
 
-    override suspend fun save(user: User, description: String, date: Date, status: Status) {
+    override suspend fun save(description: String, date: Date, status: Status) {
         withContext(context = Dispatchers.IO) {
             val taskId = taskDao.save(
                 TaskEntity(
@@ -32,7 +32,7 @@ class TaskRepositoryImpl @Inject constructor(
                     status = status.name
                 )
             )
-            userDao.findByEmail(user.email)?.let { userEntity ->
+            userDao.findLocalUser()?.let { userEntity ->
                 userTaskDao.save(
                     mutableListOf(
                         UserTaskEntity(

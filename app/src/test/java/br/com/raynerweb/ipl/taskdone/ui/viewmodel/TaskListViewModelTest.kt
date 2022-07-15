@@ -4,14 +4,11 @@ import androidx.annotation.CallSuper
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import br.com.raynerweb.ipl.taskdone.mocks.Mocks.TASK
-import br.com.raynerweb.ipl.taskdone.mocks.Mocks.USER
 import br.com.raynerweb.ipl.taskdone.mocks.Mocks.USER_EMPTY_TASK
-import br.com.raynerweb.ipl.taskdone.mocks.Mocks.USER_ONE_TASK
 import br.com.raynerweb.ipl.taskdone.mocks.Mocks.USER_TASK
 import br.com.raynerweb.ipl.taskdone.repository.TaskRepository
 import br.com.raynerweb.ipl.taskdone.repository.UserRepository
 import br.com.raynerweb.ipl.taskdone.test.CoroutineTestRule
-import br.com.raynerweb.ipl.taskdone.ui.model.Status
 import br.com.raynerweb.ipl.taskdone.ui.model.Task
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi

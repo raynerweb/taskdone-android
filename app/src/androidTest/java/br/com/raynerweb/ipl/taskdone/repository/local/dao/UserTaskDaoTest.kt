@@ -45,6 +45,7 @@ class UserTaskDaoTest {
         val user = UserEntity(
             name = "Ráyner",
             email = "email@email.com",
+            isLocal = true
         )
         userDao.save(user)
         Assert.assertTrue(userDao.findAll().isNotEmpty())
