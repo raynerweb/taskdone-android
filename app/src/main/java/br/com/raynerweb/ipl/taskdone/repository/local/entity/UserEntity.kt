@@ -17,6 +17,8 @@ data class UserEntity(
     @PrimaryKey(autoGenerate = true)
     val userId: Long = 0,
     val remoteId: Long = 0,
-    val name: String,
-    val email: String,
+    var name: String,
+    var email: String,
+    var photo: String? = null,
+    val isLocal: Boolean
 )

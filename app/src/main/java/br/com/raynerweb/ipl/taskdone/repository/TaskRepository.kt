@@ -8,7 +8,7 @@ import java.util.*
 
 interface TaskRepository {
 
-    suspend fun save(user: User, description: String, date: Date, status: Status)
+    suspend fun save(description: String, date: Date, status: Status)
 
     suspend fun delete(task: Task)
 

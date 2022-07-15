@@ -46,12 +46,83 @@ class DashboardViewModelTest {
 
 
     /**
-     * Scenario 2 - Visualizar o Dashboard com dados
-     * Given that I am on the dashboard screen
-     * Quando eu tiver tarefas salvas no aplicativo
-     * Then I should see a consolidation of the tasks that are in the To Do status,
-     * And see a list of tasks that are in the In Progress status,
-     * And I should see a consolidation of tasks that are in Done status
+     * Scenario 2 - View the Dashboard without Data
+     * Given that I am at the dashboard screen
+     * When I have no tasks saved in the application
+     * Then I should see the message "No data to display"
+     * And the "Create Tasks" button
+     */
+    @Test
+    fun `Then I should see the message No data to display`(): Unit =
+        runBlocking {
+            whenever(userRepository.findAll()).thenReturn(listOf(Mocks.USER_EMPTY_TASK))
+
+            val observer = spy<Observer<List<Pair<Float, Status>>>>()
+            viewModel.chartEntries.observeForever(observer)
+
+            viewModel.getChartEntries()
+            verify(observer).onChanged(eq(emptyList()))
+        }
+
+    /**
+     * Scenario 3 - Being Redirected to Login
+     * Given I am on the dashboard screen
+     * When I click on the "Create Tasks" button
+     * And I am not logged into the application
+     * Then I should be redirected to the Login screen
+     */
+    @Test
+    fun `Then I should be redirected to the Login screen`(): Unit =
+        runBlocking {
+            whenever(userRepository.isLogged()).thenReturn(false)
+
+            val observer = spy<Observer<Boolean>>()
+            viewModel.isLogged.observeForever(observer)
+
+            viewModel.createTask()
+            verify(observer).onChanged(eq(false))
+        }
+
+    /**
+     * Scenario 4 - Login Navigation
+     * Given I am on the dashboard screen
+     * When I click on the Login menu option
+     * Then I should be redirected to the Login screen
+     */
+    @Test
+    fun `When I click on the Login menu option Then I should be redirected to the Login screen`(): Unit =
+        runBlocking {
+            val observer = spy<Observer<Unit>>()
+            viewModel.showLogin.observeForever(observer)
+
+            viewModel.showLoginScreen()
+            verify(observer).onChanged(eq(null))
+        }
+
+    /**
+     * Scenario 5 - Be directed to view the tasks that have been created
+     * Given I am on the dashboard screen
+     * When I click on the "Create Tasks" button
+     * And I am logged into the application
+     * Then I should be directed to the Task List screen
+     */
+    @Test
+    fun `Then I should be directed to the Task List screen`(): Unit =
+        runBlocking {
+            whenever(userRepository.isLogged()).thenReturn(true)
+
+            val observer = spy<Observer<Boolean>>()
+            viewModel.isLogged.observeForever(observer)
+
+            viewModel.createTask()
+            verify(observer).onChanged(eq(true))
+        }
+
+    /**
+     * Scenario 6 - Viewing the Dashboard with Data
+     * Given I am on the dashboard screen
+     * When I have tasks saved in the application
+     * Then I should see a graph with the percentage of tasks separated by Status
      */
     @Test
     fun `Then I should see a consolidation of the tasks that are in the To Do status`(): Unit =
@@ -83,76 +154,5 @@ class DashboardViewModelTest {
             )
         }
 
-    /**
-     * Scenario 3 - Visualizar o Dashboard sem dados
-     * Given that I am on the dashboard screen
-     * Quando eu não tiver tarefas salvas no aplicativo
-     * Então eu devo ver a mensagem "No data to be displayed"
-     * E o botão "Criar tarefas"
-     */
-    @Test
-    fun `Então eu devo ver a mensagem "No data to be displayed"`(): Unit =
-        runBlocking {
-            whenever(userRepository.findAll()).thenReturn(listOf(Mocks.USER_EMPTY_TASK))
 
-            val observer = spy<Observer<List<Pair<Float, Status>>>>()
-            viewModel.chartEntries.observeForever(observer)
-
-            viewModel.getChartEntries()
-            verify(observer).onChanged(eq(emptyList()))
-        }
-
-    /**
-     * Scenario 4 - Ser direcionado ao login ao clicar no botao criar tarefas
-     * Given that I am on the dashboard screen
-     * Quando eu clicar no botão "Criar tarefas"
-     * E não estiver logado na aplicação
-     * Então eu devo ser direcionado para o ecrã de Login
-     */
-    @Test
-    fun `Então eu devo ser direcionado para o ecrã de Login`(): Unit =
-        runBlocking {
-            whenever(userRepository.isLogged()).thenReturn(false)
-
-            val observer = spy<Observer<Boolean>>()
-            viewModel.isLogged.observeForever(observer)
-
-            viewModel.createTask()
-            verify(observer).onChanged(eq(false))
-        }
-
-    /**
-     * Scenario 5 - Ser direcionado ao login ao clicar na opção de menu criar tarefas
-     * Given that I am on the dashboard screen
-     * Quando eu clicar na opção de menu de Login
-     * Então eu devo ser direcionado para o ecrã de Login
-     */
-    @Test
-    fun `Ser direcionado ao login ao clicar na opção de menu criar tarefas`(): Unit =
-        runBlocking {
-            val observer = spy<Observer<Unit>>()
-            viewModel.showLogin.observeForever(observer)
-
-            viewModel.showLoginScreen()
-            verify(observer).onChanged(eq(null))
-        }
-
-    /**
-     * Scenario 6 - Ser direcionado para visualizao das tarefas criadas
-     * Given that I am on the dashboard screen
-     * Quando eu clicar no botão "Criar tarefas"
-     * E estiver logado na aplicação
-     * Então eu devo ser direcionado para o ecrã Task List
-     */
-    @Test
-    fun `Então eu devo ser direcionado para o ecrã Task List`(): Unit =
-        runBlocking {
-            whenever(userRepository.isLogged()).thenReturn(true)
-
-            val observer = spy<Observer<Boolean>>()
-            viewModel.isLogged.observeForever(observer)
-
-            viewModel.createTask()
-            verify(observer).onChanged(eq(true))
-        }
 }
